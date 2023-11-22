@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import Footer from "../components/Footer.vue";
+import ChatRoomCard from "@/components/ChatRoomCard.vue";
+import { NButton, affixProps } from "naive-ui";
 let chats = ref([]);
+
+function createChat () {
+  
+}
+
+
 </script>
 
 <template>
@@ -11,13 +19,34 @@ let chats = ref([]);
     </header>
     <main id="rooms" class="blue-whale-alpha padding-3 margin-5">
       <h2>Salas:</h2>
-      <div></div>
+      <section class="chats-container">
+        <ChatRoomCard />
+        <ChatRoomCard />
+        <ChatRoomCard />
+        <ChatRoomCard />
+        <ChatRoomCard />
+        <ChatRoomCard />
+        <ChatRoomCard />
+        <ChatRoomCard />
+        <ChatRoomCard />
+        <ChatRoomCard />
+        <ChatRoomCard />
+        <ChatRoomCard />
+        <ChatRoomCard />
+        <ChatRoomCard />
+        <ChatRoomCard />
+        <ChatRoomCard />
+        <ChatRoomCard />
+        <ChatRoomCard />
+        <ChatRoomCard />
+        <ChatRoomCard />
+      </section>
     </main>
     <section id="create" class="blue-whale-alpha margin-5">
       <table>
         <tr>
           <td>
-            <a href="">criar</a>
+            <n-button @click="createChat()" type="info" > Criar sala </n-button>
           </td>
           <td>
             <a href="">buscar</a>
@@ -32,5 +61,15 @@ let chats = ref([]);
 <style scoped>
 a {
   color: white;
+}
+
+.chats-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+ChatRoomCard {
+  margin: 10px;
 }
 </style>

@@ -1,17 +1,13 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HomeView from './views/HomeView.vue';
+import { RouterLink, RouterView } from "vue-router";
+import HomeView from "./views/HomeView.vue";
+import naive from "naive-ui";
 </script>
 
 <template>
-
   <div>
-    <HomeView/>
+    <HomeView />
   </div>
-
-  
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

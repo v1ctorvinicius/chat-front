@@ -1,9 +1,10 @@
 <template>
   <footer class="blue">
-    Victor <br />
+    Victor ©<br />
     2023
   </footer>
 </template>
+
 <style scoped>
 footer {
   text-align: center;
