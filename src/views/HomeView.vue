@@ -3,10 +3,14 @@ import { ref } from "vue";
 import Footer from "../components/Footer.vue";
 import ChatRoomCard from "@/components/ChatRoomCard.vue";
 import { NButton, affixProps } from "naive-ui";
+import axios from "axios";
+
 let chats = ref([]);
 
-function createChat () {
-  
+const createChat = () => {
+
+  chats = axios.post("http://localhost:8081/chats/", { name: 'test' });
+
 }
 
 
@@ -20,33 +24,14 @@ function createChat () {
     <main id="rooms" class="blue-whale-alpha padding-3 margin-5">
       <h2>Salas:</h2>
       <section class="chats-container">
-        <ChatRoomCard />
-        <ChatRoomCard />
-        <ChatRoomCard />
-        <ChatRoomCard />
-        <ChatRoomCard />
-        <ChatRoomCard />
-        <ChatRoomCard />
-        <ChatRoomCard />
-        <ChatRoomCard />
-        <ChatRoomCard />
-        <ChatRoomCard />
-        <ChatRoomCard />
-        <ChatRoomCard />
-        <ChatRoomCard />
-        <ChatRoomCard />
-        <ChatRoomCard />
-        <ChatRoomCard />
-        <ChatRoomCard />
-        <ChatRoomCard />
-        <ChatRoomCard />
+
       </section>
     </main>
     <section id="create" class="blue-whale-alpha margin-5">
       <table>
         <tr>
           <td>
-            <n-button @click="createChat()" type="info" > Criar sala </n-button>
+            <n-button @click="createChat" type="info"> Criar sala </n-button>
           </td>
           <td>
             <a href="">buscar</a>
@@ -67,9 +52,5 @@ a {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-}
-
-ChatRoomCard {
-  margin: 10px;
 }
 </style>
