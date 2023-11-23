@@ -1,13 +1,20 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
 import HomeView from "./views/HomeView.vue";
-import naive from "naive-ui";
+import Nav from "./components/Nav.vue";
+import Footer from "./components/Footer.vue";
 </script>
 
 <template>
-  <div>
-    <HomeView />
+  <div class="vintage">
+    <Nav />
+    <HomeView class="home-view" />
+    <Footer />
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.home-view {
+  margin: 2vh;
+}
+</style>

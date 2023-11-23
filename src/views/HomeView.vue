@@ -1,37 +1,47 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import Footer from "../components/Footer.vue";
 import ChatRoomCard from "@/components/ChatRoomCard.vue";
-import { NButton, affixProps } from "naive-ui";
+import { NButton, NInput } from "naive-ui";
 import axios from "axios";
+import type ChatRoom from "../types/ChatRoom";
 
-let chats = ref([]);
+let chats = ref<ChatRoom[]>([]);
+let chatCount = 0;
+
+axios.get("http://localhost:8081/chats/count").then((res) => {
+  chatCount = res.data;
+});
 
 const createChat = () => {
-
-  chats = axios.post("http://localhost:8081/chats/", { name: 'test' });
-
-}
-
-
+  axios.post("http://localhost:8081/chats/").then((res) => {
+    chats.value.push(res.data);
+  });
+  console.log("chats: ", chats.value[0]);
+};
 </script>
 
 <template>
-  <div class="vintage text-white">
+  <div class="text-white">
     <header>
-      <h1 class="blue-whale-alpha padding-3 margin-5">Web Chat Home</h1>
+      <h1 class="blue-whale-alpha margin-5 padding-3 border-radius-10">
+        Web Chat Home
+      </h1>
     </header>
-    <main id="rooms" class="blue-whale-alpha padding-3 margin-5">
-      <h2>Salas:</h2>
+    <main
+      id="rooms"
+      class="blue-whale-alpha padding-3 margin-5 border-radius-10"
+    >
+      <h2>Chats:</h2>
       <section class="chats-container">
-
+        <ChatRoomCard v-for="chat in chats" :chatName="chat.name" />
       </section>
     </main>
     <section id="create" class="blue-whale-alpha margin-5">
       <table>
         <tr>
           <td>
-            <n-button @click="createChat" type="info"> Criar sala </n-button>
+            <input type="text">
+            <n-button @click="createChat" type="info"> Criar chat </n-button>
           </td>
           <td>
             <a href="">buscar</a>
@@ -39,7 +49,6 @@ const createChat = () => {
         </tr>
       </table>
     </section>
-    <Footer />
   </div>
 </template>
 
@@ -52,5 +61,21 @@ a {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+}
+
+.border-radius-10 {
+  border-radius: 10px;
+}
+
+.margin-5 {
+  margin: 0 5vw 2vw 5vw;
+}
+
+.padding-3 {
+  padding: 3vw;
+}
+
+.borda {
+  border: 1px solid red;
 }
 </style>
