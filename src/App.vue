@@ -17,6 +17,7 @@ import Footer from "./components/Footer.vue";
 .main {
   min-height: 100vh;
   border: 1px solid blue;
+  margin: 0%;
 }
 
 .flex {
