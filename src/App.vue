@@ -6,14 +6,7 @@ import Footer from "./components/Footer.vue";
 </script>
 
 <template>
-  <main class="vintage main">
-    <Nav />
-    <div class="flex">
-
-      <HomeView class="home-view" />
-      <Footer />
-    </div>
-  </main>
+    <router-view class="vintage main"></router-view>
 </template>
 
 <style scoped>

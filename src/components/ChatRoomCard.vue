@@ -5,12 +5,15 @@ const props = defineProps({
 </script>
 
 <template>
-  <main class="card-container">
-    <div class="title">
-      <h3>{{ props.chatName }}</h3>
-    </div>
-    <div class="body">created by: user_name</div>
-  </main>
+  <div @click="$router.push('/chat')">
+    
+    <main class="card-container">
+      <div class="title">
+        <h3>{{ props.chatName }}</h3>
+      </div>
+      <div class="body">created by: user_name</div>
+    </main>
+  </div>
 </template>
 
 <style scoped>

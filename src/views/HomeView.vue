@@ -21,6 +21,7 @@ const createChat = () => {
 
 <template>
   <div class="text-white">
+    
     <header>
       <h1 class="blue-whale-alpha margin-5 padding-3 border-radius-10">
         Web Chat Home
