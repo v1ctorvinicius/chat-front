@@ -6,15 +6,31 @@ import Footer from "./components/Footer.vue";
 </script>
 
 <template>
-  <div class="vintage">
+  <main class="vintage main">
     <Nav />
-    <HomeView class="home-view" />
-    <Footer />
-  </div>
+    <div class="flex">
+
+      <HomeView class="home-view" />
+      <Footer />
+    </div>
+  </main>
 </template>
 
 <style scoped>
 .home-view {
-  margin: 2vh;
+  margin: 2vw;
+}
+
+.main {
+  min-height: 100vh;
+  border: 1px solid blue;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  border: 1px solid red;
+
 }
 </style>

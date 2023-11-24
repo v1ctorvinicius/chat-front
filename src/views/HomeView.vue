@@ -7,13 +7,12 @@ import type ChatRoom from "../types/ChatRoom";
 
 let chats = ref<ChatRoom[]>([]);
 let chatCount = 0;
+let newRoomName = "";
 
-axios.get("http://localhost:8081/chats/count").then((res) => {
-  chatCount = res.data;
-});
+axios.get("http://localhost:8081/chats/").then((res) => (chats.value = res.data));
 
 const createChat = () => {
-  axios.post("http://localhost:8081/chats/").then((res) => {
+  axios.post("http://localhost:8081/chats/", { name: newRoomName }).then((res) => {
     chats.value.push(res.data);
   });
   console.log("chats: ", chats.value[0]);
@@ -27,10 +26,7 @@ const createChat = () => {
         Web Chat Home
       </h1>
     </header>
-    <main
-      id="rooms"
-      class="blue-whale-alpha padding-3 margin-5 border-radius-10"
-    >
+    <main id="rooms" class="blue-whale-alpha padding-3 margin-5 border-radius-10">
       <h2>Chats:</h2>
       <section class="chats-container">
         <ChatRoomCard v-for="chat in chats" :chatName="chat.name" />
@@ -40,7 +36,7 @@ const createChat = () => {
       <table>
         <tr>
           <td>
-            <input type="text">
+            <input type="text" v-model="newRoomName">
             <n-button @click="createChat" type="info"> Criar chat </n-button>
           </td>
           <td>
