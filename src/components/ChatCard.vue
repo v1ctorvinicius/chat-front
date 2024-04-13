@@ -12,9 +12,9 @@ function cardClickHandler() {
 </script>
 
 <template>
-  <Card style="width: 25rem; overflow: hidden" @click="cardClickHandler">
+  <Card style="width: 15rem; height: 17rem; overflow: hidden" @click="cardClickHandler" class="card-container">
     <template #header>
-      <img alt="user header" src="https://primefaces.org/cdn/primevue/images/usercard.png" />
+      <img alt="user header" src="https://primefaces.org/cdn/primevue/images/usercard.png" style="width: 100%; " />
     </template>
     <template #title>{{ props.chatName }}</template>
     <template #subtitle>Card subtitle</template>
@@ -48,9 +48,9 @@ function cardClickHandler() {
 <style scoped>
 .card-container {
   background-color: rgba(9, 36, 43, 0.7);
-  width: 14vw;
-  height: 14vw;
-  border-radius: 10%;
+  /* width: 10px; */
+  /* height: 50px; */
+  /* border-radius: 10%; */
   margin: 10px;
 }
 
@@ -62,9 +62,10 @@ function cardClickHandler() {
 }
 
 .title {
-  height: 10vh;
+  color: tomato;
+  /* height: 10vh;
   width: 50%;
-  padding: 1%;
+  padding: 1%; */
 }
 
 .body {
