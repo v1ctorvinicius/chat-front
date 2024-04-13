@@ -5,14 +5,13 @@ import App from "./App.vue";
 import router from "./router";
 
 import PrimeVue from "primevue/config";
-import 'primevue/resources/themes/aura-light-green/theme.css'
-import Dialog from 'primevue/dialog';
+import "primevue/resources/themes/aura-light-green/theme.css";
+import Dialog from "primevue/dialog";
+import Card from "primevue/card";
 
 const app = createApp(App);
-
-app.use(PrimeVue);
 app.use(router);
-
-app.component('Dialog', Dialog);
-
+app.use(PrimeVue);
+app.component("Dialog", Dialog);
+app.component("Card", Card);
 app.mount("#app");
