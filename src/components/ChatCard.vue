@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 const props = defineProps({
   chatName: String,
 });
@@ -11,7 +12,29 @@ function cardClickHandler() {
 </script>
 
 <template>
-  <div @click="cardClickHandler">
+  <Card style="width: 25rem; overflow: hidden" @click="cardClickHandler">
+    <template #header>
+      <img alt="user header" src="https://primefaces.org/cdn/primevue/images/usercard.png" />
+    </template>
+    <template #title>{{ props.chatName }}</template>
+    <template #subtitle>Card subtitle</template>
+    <template #content>
+      <p class="m-0">
+        created by: user_name <br>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam
+        deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate
+        neque
+        quas!
+      </p>
+    </template>
+    <template #footer>
+      <div class="flex gap-3 mt-1">
+        <Button label="Cancel" severity="secondary" outlined class="w-full" />
+        <Button label="Save" class="w-full" />
+      </div>
+    </template>
+  </Card>
+  <!-- <div @click="cardClickHandler">
 
     <main class=" card-container">
       <div class="title">
@@ -19,7 +42,7 @@ function cardClickHandler() {
       </div>
       <div class="body">created by: user_name</div>
     </main>
-  </div>
+  </div> -->
 </template>
 
 <style scoped>
