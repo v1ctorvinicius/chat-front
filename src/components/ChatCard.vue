@@ -2,12 +2,18 @@
 const props = defineProps({
   chatName: String,
 });
+
+const emit = defineEmits(["changeVisible"]);
+
+function cardClickHandler() {
+  emit("changeVisible");
+}
 </script>
 
 <template>
-  <div @click="$router.push('/chat')">
-    
-    <main class="card-container">
+  <div @click="cardClickHandler">
+
+    <main class=" card-container">
       <div class="title">
         <h3>{{ props.chatName }}</h3>
       </div>
