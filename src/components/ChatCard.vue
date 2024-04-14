@@ -7,24 +7,22 @@ const props = defineProps({
 const emit = defineEmits(["changeVisible"]);
 
 function cardClickHandler() {
-  emit("changeVisible");
+  emit("changeVisible", props.chatName);
 }
 </script>
 
 <template>
-  <Card style="width: 15rem; height: 17rem; overflow: hidden" @click="cardClickHandler" class="card-container">
+  <Card style=" width: 20rem; overflow: hidden" @click="cardClickHandler" class="card-container">
     <template #header>
       <img alt="user header" src="https://primefaces.org/cdn/primevue/images/usercard.png" style="width: 100%; " />
     </template>
+
     <template #title>{{ props.chatName }}</template>
     <template #subtitle>Card subtitle</template>
     <template #content>
       <p class="m-0">
         created by: user_name <br>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam
-        deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate
-        neque
-        quas!
+
       </p>
     </template>
     <template #footer>
