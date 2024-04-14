@@ -8,7 +8,8 @@ import type chat from "../types/chat";
 let chats = ref<chat[]>([]);
 let chatCount = 0;
 let newChatName = "";
-const visible = ref(false);
+const modalChatName = ref("");
+const modalVisibility = ref(false);
 
 axios.get("http://localhost:8080/chats/").then((res) => (chats.value = res.data));
 
@@ -18,10 +19,13 @@ const createChat = () => {
   }).catch((err) => console.error(err));
 };
 
-const changeVisibleHandler = () => {
-  visible.value = !visible.value
-  console.log(visible.value);
+function changeVisibleHandler(chatName: string) {
+  modalVisibility.value = !modalVisibility.value;
+  modalChatName.value = chatName;
+}
 
+function changeModalVisibility() {
+  modalVisibility.value = !modalVisibility.value;
 }
 </script>
 
@@ -54,7 +58,10 @@ const changeVisibleHandler = () => {
     </section>
   </div>
 
-  <Dialog :visible="visible" modal :closable="true" header="chat modal" :style="{ width: '25rem' }">
+  <Dialog :visible="modalVisibility" modal :header="modalChatName" :style="{ width: '75vw' }"
+    :pt:mask:style="{ 'backdrop-filter': 'blur(5px)' }" :pt:header:style="{ 'color': 'tomato' }"
+    :pt:closeButton:onClick="changeModalVisibility">
+
     <div class="p-fluid">
       <div class="p-field">
         <label for="messageInput">Digite sua mensagem:</label>
@@ -63,13 +70,11 @@ const changeVisibleHandler = () => {
     <template #footer>
       <div class="p-d-flex p-jc-end">
         <Button label="Enviar" icon="pi pi-send" />
-        <Button label="Fechar" icon="pi pi-times" class="p-button-secondary" />
       </div>
     </template>
 
   </Dialog>
 </template>
-
 
 <style scoped>
 a {
