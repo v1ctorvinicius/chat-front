@@ -5,11 +5,12 @@ import axios from "axios";
 import ChatCard from "@/components/ChatCard.vue";
 import type chat from "../types/chat";
 
-let chats = ref<chat[]>([]);
+const chats = ref<chat[]>([]);
 let chatCount = 0;
 let newChatName = "";
 const modalChatName = ref("");
 const modalVisibility = ref(false);
+const newMessage = ref("");
 
 axios.get("http://localhost:8080/chats/").then((res) => (chats.value = res.data));
 
@@ -64,7 +65,10 @@ function changeModalVisibility() {
 
     <div class="p-fluid">
       <div class="p-field">
-        <label for="messageInput">Digite sua mensagem:</label>
+        <FloatLabel>
+          <Textarea v-model="newMessage" rows="5" cols="30" />
+          <label>Enter your message</label>
+        </FloatLabel>
       </div>
     </div>
     <template #footer>
