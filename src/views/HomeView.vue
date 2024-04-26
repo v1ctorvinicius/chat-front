@@ -89,7 +89,8 @@ const items = ref([
       <table>
         <tr>
           <td>
-            <input type="text" v-model="newChatName">
+            <InputText type="text" v-model="newChatName" placeholder="Enter chat name" />
+            
             <Button @click="createChat" label="create chat" icon="pi pi-plus" severity="success" />
           </td>
           <td>
