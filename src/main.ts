@@ -11,6 +11,7 @@ import Card from "primevue/card";
 import Button from "primevue/button";
 import Textarea from "primevue/textarea";
 import FloatLabel from "primevue/floatlabel";
+import Menubar from "primevue/menubar";
 
 const app = createApp(App);
 app.use(router);
@@ -20,4 +21,5 @@ app.component("Card", Card);
 app.component("Button", Button);
 app.component("Textarea", Textarea);
 app.component("FloatLabel", FloatLabel);
+app.component("Menubar", Menubar);
 app.mount("#app");
