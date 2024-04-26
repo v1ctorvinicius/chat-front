@@ -7,7 +7,8 @@ import ChatCard from "@/components/ChatCard.vue";
 import type chat from "../types/chat";
 
 import { useToast } from 'primevue/usetoast';
-const toast = useToast();
+const toastSuccess = useToast();
+const toastError = useToast();
 
 const chats = ref<chat[]>([]);
 const selectedCard = ref<chat | null>(null);
@@ -31,12 +32,16 @@ const createChat = () => {
 
   axios.post("http://localhost:8080/chats/", { name: newChatName }).then((res) => {
     chats.value.push(res.data);
-    showToast();
-  }).catch((err) => console.error(err));
+    showSuccessToast();
+  }).catch((err) => { console.error(err), showErrorToast() });
 };
 
-const showToast = () => {
-  toast.add({ severity: 'success', summary: 'Chat Created', life: 5000 });
+const showSuccessToast = () => {
+  toastSuccess.add({ severity: 'success', summary: 'Chat Created', life: 5000 });
+};
+
+const showErrorToast = () => {
+  toastError.add({ severity: 'error', summary: 'Error', life: 0 });
 };
 
 function changeVisibleHandler(chatName: string) {
@@ -52,6 +57,10 @@ function handleKeyboardKeypess(event: KeyboardEvent) {
   if (event.key === "Escape" && modalVisibility.value == true) {
     changeModalVisibility();
     selectedCard.value = null;
+  }
+
+  if (event.key === "Enter" && modalVisibility.value == false) {
+    createChat();
   }
 }
 
@@ -89,8 +98,9 @@ const items = ref([
       <table>
         <tr>
           <td>
-            <InputText type="text" v-model="newChatName" placeholder="Enter chat name" />
-            
+            <InputText type="text" v-model="newChatName" placeholder="Enter chat name"
+              @keydown="handleKeyboardKeypess" />
+
             <Button @click="createChat" label="create chat" icon="pi pi-plus" severity="success" />
           </td>
           <td>
@@ -120,9 +130,8 @@ const items = ref([
     </template>
 
   </Dialog>
-
-  <Toast position="bottom-right" :pt:summary:style="'z-index:9999; color: tomato'"></Toast>
-
+  <!-- TODO: remove style -->
+  <Toast position="bottom-left" />
 </template>
 
 <style scoped>
