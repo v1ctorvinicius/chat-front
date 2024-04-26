@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { ref } from 'vue';
-import { NButton } from 'naive-ui';
 import type Message from '../types/Message';
 
 let messages = ref<Message[]>([]);
