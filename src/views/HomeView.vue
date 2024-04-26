@@ -2,8 +2,12 @@
 import { ref, watch } from "vue";
 
 import axios from "axios";
+
 import ChatCard from "@/components/ChatCard.vue";
 import type chat from "../types/chat";
+
+import { useToast } from 'primevue/usetoast';
+const toast = useToast();
 
 const chats = ref<chat[]>([]);
 const selectedCard = ref<chat | null>(null);
@@ -27,7 +31,12 @@ const createChat = () => {
 
   axios.post("http://localhost:8080/chats/", { name: newChatName }).then((res) => {
     chats.value.push(res.data);
+    showToast();
   }).catch((err) => console.error(err));
+};
+
+const showToast = () => {
+  toast.add({ severity: 'success', summary: 'Chat Created', life: 5000 });
 };
 
 function changeVisibleHandler(chatName: string) {
@@ -91,7 +100,7 @@ const items = ref([
     </section>
   </div>
 
-  <Dialog :visible="modalVisibility" modal :header="modalChatName" :style="{ width: '75vw' }"
+  <Dialog :visible="modalVisibility" modal maximizable :header="modalChatName"
     :pt:mask:style="{ 'backdrop-filter': 'blur(5px)' }" :pt:title:style="'color:tomato;'"
     :pt:header:style="'color: white;'" :pt:closeButton:onClick="modalCloseButtonHandler">
     <h2 style="margin: 0 0 20px 0;">{{ selectedCard }} </h2>
@@ -110,6 +119,9 @@ const items = ref([
     </template>
 
   </Dialog>
+
+  <Toast position="bottom-right" :pt:summary:style="'z-index:9999; color: tomato'"></Toast>
+
 </template>
 
 <style scoped>
@@ -136,4 +148,3 @@ a {
   padding: 3vw;
 }
 </style>
-../types/chat
