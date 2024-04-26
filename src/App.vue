@@ -6,7 +6,9 @@ import Footer from "./components/Footer.vue";
 </script>
 
 <template>
-    <router-view class="vintage main"></router-view>
+  <div class="vintage main">
+    <router-view></router-view>
+  </div>
 </template>
 
 <style scoped>

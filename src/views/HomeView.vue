@@ -1,27 +1,38 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import ChatRoomCard from "@/components/ChatRoomCard.vue";
-import { NButton, NInput } from "naive-ui";
+
 import axios from "axios";
-import type ChatRoom from "../types/ChatRoom";
+import ChatCard from "@/components/ChatCard.vue";
+import type chat from "../types/chat";
 
-let chats = ref<ChatRoom[]>([]);
+const chats = ref<chat[]>([]);
 let chatCount = 0;
-let newRoomName = "";
+let newChatName = "";
+const modalChatName = ref("");
+const modalVisibility = ref(false);
+const newMessage = ref("");
 
-axios.get("http://localhost:8081/chats/").then((res) => (chats.value = res.data));
+axios.get("http://localhost:8080/chats/").then((res) => (chats.value = res.data));
 
 const createChat = () => {
-  axios.post("http://localhost:8081/chats/", { name: newRoomName }).then((res) => {
+  axios.post("http://localhost:8080/chats/", { name: newChatName }).then((res) => {
     chats.value.push(res.data);
-  });
-  console.log("chats: ", chats.value[0]);
+  }).catch((err) => console.error(err));
 };
+
+function changeVisibleHandler(chatName: string) {
+  modalVisibility.value = !modalVisibility.value;
+  modalChatName.value = chatName;
+}
+
+function changeModalVisibility() {
+  modalVisibility.value = !modalVisibility.value;
+}
 </script>
 
 <template>
-  <div class="text-white">
-    
+  <div class="text-white vintage">
+
     <header>
       <h1 class="blue-whale-alpha margin-5 padding-3 border-radius-10">
         Web Chat Home
@@ -30,15 +41,15 @@ const createChat = () => {
     <main id="rooms" class="blue-whale-alpha padding-3 margin-5 border-radius-10">
       <h2>Chats:</h2>
       <section class="chats-container">
-        <ChatRoomCard v-for="chat in chats" :chatName="chat.name" />
+        <ChatCard v-for="chat in chats" :chatName="chat.name" @change-visible="changeVisibleHandler" />
       </section>
     </main>
     <section id="create" class="blue-whale-alpha margin-5">
       <table>
         <tr>
           <td>
-            <input type="text" v-model="newRoomName">
-            <n-button @click="createChat" type="info"> Criar chat </n-button>
+            <input type="text" v-model="newChatName">
+            <Button @click="createChat" label="create chat" icon="pi pi-plus" severity="success" />
           </td>
           <td>
             <a href="">buscar</a>
@@ -47,6 +58,26 @@ const createChat = () => {
       </table>
     </section>
   </div>
+
+  <Dialog :visible="modalVisibility" modal :header="modalChatName" :style="{ width: '75vw' }"
+    :pt:mask:style="{ 'backdrop-filter': 'blur(5px)' }" :pt:header:style="{ 'color': 'tomato' }"
+    :pt:closeButton:onClick="changeModalVisibility">
+
+    <div class="p-fluid">
+      <div class="p-field">
+        <FloatLabel>
+          <Textarea v-model="newMessage" rows="5" cols="30" />
+          <label>Enter your message</label>
+        </FloatLabel>
+      </div>
+    </div>
+    <template #footer>
+      <div class="p-d-flex p-jc-end">
+        <Button label="Enviar" icon="pi pi-send" />
+      </div>
+    </template>
+
+  </Dialog>
 </template>
 
 <style scoped>
@@ -76,3 +107,4 @@ a {
   border: 1px solid red;
 }
 </style>
+../types/chat
