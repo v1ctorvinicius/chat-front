@@ -28,6 +28,14 @@ function changeVisibleHandler(chatName: string) {
 function changeModalVisibility() {
   modalVisibility.value = !modalVisibility.value;
 }
+
+function handleKeyboardKeypess(event: KeyboardEvent) {
+  if (event.key === "Escape" && modalVisibility.value == true) {
+    changeModalVisibility();
+  }
+}
+
+document.addEventListener("keydown", handleKeyboardKeypess);
 </script>
 
 <template>
@@ -60,8 +68,8 @@ function changeModalVisibility() {
   </div>
 
   <Dialog :visible="modalVisibility" modal :header="modalChatName" :style="{ width: '75vw' }"
-    :pt:mask:style="{ 'backdrop-filter': 'blur(5px)' }" :pt:header:style="{ 'color': 'tomato' }"
-    :pt:closeButton:onClick="changeModalVisibility">
+    :pt:mask:style="{ 'backdrop-filter': 'blur(5px)' }" :pt:title:style="'color:tomato;'"
+    :pt:header:style="'color: white;'" :pt:closeButton:onClick="changeModalVisibility" :closeOnEscape="true">
 
     <div class="p-fluid">
       <div class="p-field">
