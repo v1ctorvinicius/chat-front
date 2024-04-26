@@ -12,7 +12,8 @@ function cardClickHandler() {
 </script>
 
 <template>
-  <Card style=" width: 15vw; max-height: 35vh; overflow: hidden" @click="cardClickHandler" class="card-container">
+  <Card style=" width: 15vw; max-height: 35vh; overflow: hidden" @click="cardClickHandler"
+    class="card-container my-fadein">
     <template #header>
       <img alt="user header" src="https://primefaces.org/cdn/primevue/images/usercard.png" style="width: 100%; " />
     </template>
@@ -46,32 +47,48 @@ function cardClickHandler() {
       </div>
     </template>
   </Card>
-  <!-- <div @click="cardClickHandler">
 
-    <main class=" card-container">
-      <div class="title">
-        <h3>{{ props.chatName }}</h3>
-      </div>
-      <div class="body">created by: user_name</div>
-    </main>
-  </div> -->
 </template>
 
 <style scoped>
 .card-container {
-  background-color: rgba(9, 36, 43, 0.7);
-  /* width: 10px; */
-  /* height: 50px; */
-  /* border-radius: 10%; */
+  background-color: rgba(2, 7, 8, 0.7);
   margin: 10px;
 }
 
 .card-container:hover {
-  box-shadow: rgba(240, 46, 170, 0.4) 5px 5px, rgba(240, 46, 170, 0.3) 10px 10px,
-    rgba(240, 46, 170, 0.2) 15px 15px, rgba(240, 46, 170, 0.1) 20px 20px,
-    rgba(240, 46, 170, 0.05) 25px 25px;
-  transform: translate3d(-5px, -5px, 0);
+  animation: fadein 0.5s ease forwards;
 }
+
+.card-container:not(:hover) {
+  animation: fadeout 0.5s ease forwards;
+}
+
+@keyframes fadein {
+
+  100% {
+    transform: translate3d(-5px, -5px, 0);
+    box-shadow: rgba(240, 46, 170, 0.4) 5px 5px, rgba(240, 46, 170, 0.3) 10px 10px,
+      rgba(240, 46, 170, 0.2) 15px 15px, rgba(240, 46, 170, 0.1) 20px 20px,
+      rgba(240, 46, 170, 0.05) 25px 25px;
+  }
+}
+
+@keyframes fadeout {
+  from {
+    transform: translate3d(-5px, -5px, 0);
+    box-shadow: rgba(240, 46, 170, 0.4) 5px 5px, rgba(240, 46, 170, 0.3) 10px 10px,
+      rgba(240, 46, 170, 0.2) 15px 15px, rgba(240, 46, 170, 0.1) 20px 20px,
+      rgba(240, 46, 170, 0.05) 25px 25px;
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+    box-shadow: none;
+  }
+}
+
+
 
 .title {
   color: tomato;
