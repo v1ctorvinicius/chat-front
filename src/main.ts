@@ -13,6 +13,8 @@ import Button from "primevue/button";
 import Textarea from "primevue/textarea";
 import FloatLabel from "primevue/floatlabel";
 import Menubar from "primevue/menubar";
+import Toast from "primevue/toast";
+import ToastService from "primevue/toastservice";
 
 const app = createApp(App);
 app.use(router);
@@ -23,4 +25,6 @@ app.component("Button", Button);
 app.component("Textarea", Textarea);
 app.component("FloatLabel", FloatLabel);
 app.component("Menubar", Menubar);
+app.component("Toast", Toast);
+app.use(ToastService);
 app.mount("#app");
