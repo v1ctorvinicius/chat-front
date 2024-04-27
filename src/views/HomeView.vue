@@ -74,11 +74,15 @@ document.addEventListener("keydown", handleKeyboardKeypess);
 
 const items = ref([
   {
+    label: "Forums",
+    icon: "pi pi-user-edit"
+  },
+  {
     label: "Chats",
     icon: "pi pi-comments",
   },
   {
-    label:"Radio",
+    label: "Radio",
     icon: "pi pi-headphones",
   }
 ])
@@ -89,7 +93,9 @@ const items = ref([
   <div class="text-white vintage">
 
     <header>
-      <Menubar :model="items" class="blue-whale-alpha margin-5 border-radius-10" />
+      <Menubar
+        :pt="{ icon: (options) => ({ style: { 'margin-right': '15%' } }), menuitem: (options) => ({ style: { 'display': 'flex', 'justify-content': 'center', 'width': '10vw' } }), label: (options) => ({ style: { 'margin-right': '15px' } }) }"
+        :model="items" class="blue-whale-alpha margin-5 border-radius-10" />
     </header>
     <main id="rooms" class="blue-whale-alpha padding-3 margin-5 border-radius-10">
       <h2 v-if="chats.length == 0">There are no chats 😐 </h2>
