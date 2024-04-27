@@ -9,6 +9,7 @@ import type chat from "../types/chat";
 import { useToast } from 'primevue/usetoast';
 const toastSuccess = useToast();
 const toastError = useToast();
+const toastErrorNameTooLarge = useToast();
 
 const chats = ref<chat[]>([]);
 const selectedCard = ref<chat | null>(null);
@@ -25,10 +26,8 @@ const url: string = import.meta.env.VITE_API_BASE_URL
 axios.get(url + "/chats/").then((res) => (chats.value = res.data));
 
 const createChat = () => {
-  if (newChatName.length > 60) {
-    //todo: toast
-    console.error("Nome muito grande");
-
+  if (newChatName.length > 50) {
+    toastErrorNameTooLarge.add({ severity: 'error', summary: 'Error', life: 0, detail: 'Chat name cannot be longer than 50 characters, got:  ' + newChatName.length });
     return
   }
 
@@ -77,6 +76,10 @@ const items = ref([
   {
     label: "Chats",
     icon: "pi pi-comments",
+  },
+  {
+    label:"Radio",
+    icon: "pi pi-headphones",
   }
 ])
 </script>
