@@ -21,18 +21,17 @@ function cardClickHandler() {
     </template>
 
     <template #title>{{ props.chatObject?.name }}</template>
-    <template #subtitle>Card subtitle</template>
+    <template #subtitle>created by: user_name</template>
     <template #content>
       <p class="m-0">
-        SELECTED: {{ props.selected }} <br>
-        created by: user_name <br>
+        lorem ipsum dolor sit amet <br>
       </p>
     </template>
     <template #footer>
-      <div class="flex gap-3 mt-1">
-        <!-- <Button label="Cancel" severity="secondary" outlined class="w-full" />
-        <Button label="Save" class="w-full" /> -->
-      </div>
+      <!-- <div class="flex gap-3 mt-1">
+        <Button label="Cancel" severity="secondary" outlined class="w-full" />
+        <Button label="Save" class="w-full" />
+      </div> -->
     </template>
   </Card>
 
@@ -41,7 +40,7 @@ function cardClickHandler() {
 <style scoped>
 .card-container {
   background-color: rgba(2, 7, 8, 0.7);
-  margin: 10px;
+  margin: 10px 0;
 }
 
 .card-container:hover {
