@@ -84,6 +84,12 @@ const items = ref([
   {
     label: "Radio",
     icon: "pi pi-headphones",
+    items: [
+      {
+        label: "playing now",
+        icon: "pi pi-fw pi-volume-up"
+      }
+    ]
   }
 ])
 </script>
