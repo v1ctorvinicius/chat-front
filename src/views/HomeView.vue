@@ -9,7 +9,7 @@ import type chat from "../types/chat";
 import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
 import { useToast } from 'primevue/usetoast';
-import process from "process";
+
 
 const toastSuccess = useToast();
 const toastError = useToast();
@@ -27,7 +27,7 @@ const isModalVisible = ref(false);
 const isNewChatPasswordInvalid = computed(() => newChatPassword.value.length > 50);
 const isNewChatNameInvalid = computed(() => newChatName.value.length > 50);
 
-const url: string = process.env.VITE_API_BASE_URL;
+const url: string = import.meta.env.VITE_API_BASE_URL;
 console.log('url: ' + url);
 
 //TODO: cachear a lista de chats
