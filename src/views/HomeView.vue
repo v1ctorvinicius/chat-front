@@ -26,7 +26,9 @@ const isModalVisible = ref(false);
 const isNewChatPasswordInvalid = computed(() => newChatPassword.value.length > 50);
 const isNewChatNameInvalid = computed(() => newChatName.value.length > 50);
 
-const url: string = import.meta.env.VITE_API_BASE_URL
+const url: string = import.meta.env.VITE_API_BASE_URL;
+console.log('url: ' + url);
+
 //TODO: cachear a lista de chats
 const axiosInstance = axios.create({ timeout: 10000 });
 axiosInstance.get(url + "/chats/").then((res) => (chats.value = res.data));
@@ -68,9 +70,8 @@ function changeModalVisible() {
 
 
 function handleKeyboardKeydown(event: KeyboardEvent) {
-  
+
   if (event.repeat) return;
-  console.log(event.key);
   if (event.key === "Escape") {
     isModalVisible.value = false;
     selectedCard.value = null;
