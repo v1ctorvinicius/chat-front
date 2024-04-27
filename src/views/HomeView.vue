@@ -20,11 +20,9 @@ const modalChatName = ref("");
 const modalVisibility = ref(false);
 const newMessage = ref("");
 
-const teste = import.meta.env.VITE_API_BASE_URL
-console.log("teste", teste);
-
-
-axios.get(teste + "/chats/").then((res) => (chats.value = res.data));
+const url: string = import.meta.env.VITE_API_BASE_URL
+//TODO: cachear a lista de chats
+axios.get(url + "/chats/").then((res) => (chats.value = res.data));
 
 const createChat = () => {
   if (newChatName.length > 60) {
@@ -34,7 +32,7 @@ const createChat = () => {
     return
   }
 
-  axios.post(teste + "/chats/", { name: newChatName }).then((res) => {
+  axios.post(url + "/chats/", { name: newChatName }).then((res) => {
     chats.value.push(res.data);
     showSuccessToast();
   }).catch((err) => { console.error(err), showErrorToast() });
