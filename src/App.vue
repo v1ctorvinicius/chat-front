@@ -1,31 +1,32 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
-import HomeView from "./views/HomeView.vue";
-import Nav from "./components/Nav.vue";
+
+import Nav from "./components/NavbarComponent.vue";
 import Footer from "./components/Footer.vue";
 </script>
 
 <template>
   <div class="vintage main">
+    <div class="center">
+
+      <Nav />
+    </div>
     <router-view></router-view>
+    <Footer />
   </div>
 </template>
 
 <style scoped>
-.home-view {
-  margin: 2vw;
-}
+@media screen and (min-width: 1000px) {
+  .main {
+    min-height: 100vh;
+    padding: 0;
+  }
 
-.main {
-  min-height: 100vh;
-  margin: 0%;
-}
-
-.flex {
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-  border: 1px solid red;
+  .center {
+    display: flex;
+    justify-content: center;
+  }
 
 }
 </style>

@@ -12,7 +12,7 @@
 }
 
 .vintage {
-  background: rgb(25, 56, 66);
+  /* background: rgb(25, 56, 66); */
   background: linear-gradient(
     97deg,
     #366455 20%,
@@ -32,7 +32,7 @@
 }
 
 .blue-whale-alpha {
-  background-color: rgba(25, 56, 66, 0.8);
+  background-color: rgba(9, 36, 43, 0.7);
 }
 
 .spectra {
@@ -75,13 +75,14 @@
   background-color: #756147;
 }
 
-table,
-tr,
-td {
-  border: 1px solid black;
-  padding: 2%;
+.margin-5 {
+  margin: 0 5vw 2vw 5vw;
 }
 
-table {
-  width: 100%;
+.padding-3 {
+  padding: 3vw;
+}
+
+.hide {
+  display: none;
 }
