@@ -152,7 +152,7 @@ const showSearchInput = () => {
     <div class="d-flex flex-column justify-content-between" style="margin-top: 10px;">
       <FloatLabel class="float-label">
         <label for="new-chat-name-txt">Enter new chat name</label>
-        <InputText class="input-text" id="new-chat-name-txt" type="text" :invalid="isNewChatNameInvalid"
+        <InputText :pt:root:autofocus="true" class="input-text" id="new-chat-name-txt" type="text" :invalid="isNewChatNameInvalid"
           v-model="newChatName" @keydown.enter="(event) => {
             if (event.repeat) return;
             createChat()
