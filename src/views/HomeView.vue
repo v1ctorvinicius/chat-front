@@ -182,69 +182,6 @@ a {
   color: white;
 }
 
-
-
-
-@media (max-width: 767px) {
-
-  .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin: 10vh 5vw;
-    border: 1px solid green;
-    min-height: 50vh;
-
-  }
-
-  .chat-cards-section {
-
-    border: 1px solid red;
-    border-radius: 10px;
-    padding: 2%;
-    margin: 0 2%;
-    flex-grow: 2;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .empty {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .chat-cards-container {
-    /* border: 10px solid blue; */
-    display: grid;
-    justify-items: center;
-    align-items: center;
-    grid-template-columns: repeat(5, 1fr);
-
-    box-sizing: border-box;
-  }
-
-  .chat-card {}
-
-  #menu {
-    border: 1px solid yellow;
-    margin: 0 2%;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .float-label {
-    margin-top: 10%;
-  }
-
-  .input-text {
-    min-width: 20vw;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 979px) {}
-
 @media (min-width: 1200px) {
 
   .container {
@@ -278,10 +215,10 @@ a {
     /* border: 1px solid blue; */
     display: grid;
     justify-items: center;
-    align-items: center;
+    /* align-items: center; */
     grid-template-columns: repeat(5, 1fr);
     gap: 1vw;
-    
+
     box-sizing: border-box;
   }
 
@@ -304,6 +241,120 @@ a {
   }
 }
 
+
+@media (min-width: 768px) and (max-width: 979px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 8vh 5vw;
+    min-height: 50vh;
+
+  }
+
+  .chat-cards-section {
+
+    border-radius: 10px;
+    padding: 2%;
+    margin: 0 2%;
+    flex-grow: 2;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .chat-cards-container {
+    /* border: 10px solid blue; */
+    display: grid;
+    justify-items: center;
+    /* align-items: center; */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3vw;
+    padding: 0 2vw 5vh 2vw;
+  }
+
+  .chat-card {}
+
+  .menu {
+    margin: 1vh 2vw;
+    border-radius: 10px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .float-label {
+    margin-top: 10%;
+  }
+
+  .input-text {
+    min-width: 20vw;
+  }
+}
+
+@media (max-width: 767px) {
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 8vh 5vw;
+    min-height: 50vh;
+
+  }
+
+  .chat-cards-section {
+
+    border-radius: 10px;
+    padding: 2%;
+    margin: 0 2%;
+    flex-grow: 2;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .chat-cards-container {
+    /* border: 10px solid blue; */
+    display: grid;
+    justify-items: center;
+    /* align-items: center; */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3vw;
+    padding: 0 2vw 5vh 2vw;
+  }
+
+  .chat-card {}
+
+  .menu {
+    margin: 1vh 2vw;
+    border-radius: 10px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .float-label {
+    margin-top: 10%;
+  }
+
+  .input-text {
+    min-width: 20vw;
+  }
+}
+
+
+
+
+
 @media (max-width: 480px) {
   .menu {
     margin-top: 1vh;
@@ -311,6 +362,7 @@ a {
     display: flex;
     justify-content: end;
   }
+
   .container {
     display: flex;
     flex-direction: column;
@@ -321,6 +373,7 @@ a {
     min-height: 89vh;
 
   }
+
   .chat-cards-container {
     /* border: 10px solid tomato; */
     padding: 0 2vw 5vh 2vw;
@@ -335,7 +388,7 @@ a {
 
   .chat-cards-section {
     border-radius: 10px;
-    
+
     margin: 0;
     flex-grow: 2;
     display: flex;

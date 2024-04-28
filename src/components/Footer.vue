@@ -15,16 +15,6 @@
 </template>
 
 <style scoped>
-@media screen and (max-width: 480px) {
-
-  a i {
-    color: white;
-    text-decoration: none;
-    margin: 10px;
-    font-size: 16vw;
-  }
-}
-
 a i {
   color: white;
   text-decoration: none;
@@ -39,5 +29,15 @@ footer {
 
 #links {
   margin-top: 3vh;
+}
+
+@media (max-width: 480px) {
+
+  a i {
+    color: white;
+    text-decoration: none;
+    margin: 10px;
+    font-size: 16vw;
+  }
 }
 </style>

@@ -26,9 +26,30 @@ const items = ref([
   <div class="nav ">
 
     <header>
-      <Menubar
-        :pt="{ icon: (options) => ({ style: { 'margin-right': '15%' } }), menuitem: (options) => ({ style: { 'display': 'flex', 'justify-content': 'center', 'width': '10vw', 'height': '4vh' } }), label: (options) => ({ style: { 'margin-right': '15px' } }) }"
-        :model="items" class="blue-whale-alpha margin-5 border-radius-10" :breakpoint="'480px'" />
+      <Menubar :pt="{
+        button: (options) => ({
+          style: {
+            'border': '2px solid tomato',
+            'border-radius': '5px',
+            'width': '100%',
+            // 'display': 'flex',
+            // 'justify-content': 'space-around',
+          },
+
+        }),
+        icon: (options) => ({
+          style: {
+            'margin-right': '5%'
+          }
+        }), menuitem: (options) => ({
+          style: {
+            // 'display': 'flex',
+            // 'justify-content': 'center',
+          }
+        }), label: (options) => ({
+          style: { 'margin-right': '15px' }
+        })
+      }" :model="items" class="blue-whale-alpha margin-5 border-radius-10" :breakpoint="'480px'" />
     </header>
   </div>
 </template>
@@ -40,6 +61,19 @@ const items = ref([
   /* min-height: 4vh; */
   margin-top: 5vh;
 
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+  .nav {
+    margin-top: 1vh;
+  }
+}
+
+@media (max-width: 767px) {
+  .nav {
+    margin-top: 1vh;
+    width: 70vw;
+  }
 }
 
 @media (max-width: 480px) {
