@@ -34,16 +34,10 @@ const items = ref([
             // 'display': 'flex',
             // 'justify-content': 'space-around',
           },
-
         }),
         icon: (options) => ({
           style: {
             'margin-right': '5%'
-          }
-        }), menuitem: (options) => ({
-          style: {
-            // 'display': 'flex',
-            // 'justify-content': 'center',
           }
         }), label: (options) => ({
           style: { 'margin-right': '15px' }
