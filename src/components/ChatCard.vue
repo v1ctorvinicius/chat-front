@@ -15,7 +15,7 @@ function cardClickHandler() {
 
 <template>
   <Card style=" width: 15vw; max-height: 35vh; overflow: hidden" @click="cardClickHandler()"
-    class="card-container my-fadein" :class="{ 'selected': props.selected }">
+    class="card-container my-fadein" :class="{ 'selected': props.selected }" :pt:root:style="' width: 100%; border-radius: 8px'">
     <template #header>
       <img alt="user header" src="https://primefaces.org/cdn/primevue/images/usercard.png" style="width: 100%; " />
     </template>
@@ -40,7 +40,7 @@ function cardClickHandler() {
 <style scoped>
 .card-container {
   background-color: rgba(2, 7, 8, 0.7);
-  margin: 10px 0;
+  margin: 0;
 }
 
 .card-container:hover {
@@ -80,5 +80,16 @@ function cardClickHandler() {
     transform: translate3d(0, 0, 0);
     box-shadow: none;
   }
+}
+
+@media (max-width: 480px) {
+  .card-container {
+    /* width: 200px; */
+    /* border: 5px solid cyan; */
+    width: 100%;
+    height: 500px;
+    margin: 0;
+  }
+
 }
 </style>

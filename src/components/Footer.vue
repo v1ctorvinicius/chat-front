@@ -7,7 +7,7 @@
     <div id="links">
 
       <a href="https://github.com/v1ctorvinicius" target="_blank"><i class="pi pi-github"></i></a>
-      
+
       <a href="https://www.linkedin.com/in/victorvssantos/" target="_blank"><i class="pi pi-linkedin"></i></a>
     </div>
 
@@ -15,16 +15,28 @@
 </template>
 
 <style scoped>
+@media screen and (max-width: 480px) {
+
+  a i {
+    color: white;
+    text-decoration: none;
+    margin: 10px;
+    font-size: 16vw;
+  }
+}
+
 a i {
-  color: white;  
+  color: white;
   text-decoration: none;
   margin: 10px;
   font-size: 1.6vw;
 }
+
 footer {
   text-align: center;
   padding: 10px;
 }
+
 #links {
   margin-top: 3vh;
 }
