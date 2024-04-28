@@ -34,6 +34,11 @@ const axiosInstance = axios.create({ timeout: 10000 });
 axiosInstance.get(url + "/chats/").then((res) => (chats.value = res.data));
 
 const createChatLoading = ref(false);
+
+setInterval(() => {
+  axiosInstance.get(url + "/chats/").then((res) => chats.value = res.data);
+}, 10000);
+
 const createChat = () => {
   createChatLoading.value = true;
 
