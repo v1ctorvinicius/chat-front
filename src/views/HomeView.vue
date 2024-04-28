@@ -40,6 +40,7 @@ const createChat = () => {
   if (newChatName.value.length > 50) {
     toastErrorNameTooLarge.add({ severity: 'error', summary: 'Error', life: 0, detail: 'Chat name cannot be longer than 50 characters, got:  ' + newChatName.value.length });
     createChatLoading.value = false;
+    return;
   }
 
   axiosInstance
