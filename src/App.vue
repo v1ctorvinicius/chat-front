@@ -19,16 +19,20 @@ import Footer from "./components/Footer.vue";
 </template>
 
 <style scoped>
-@media (max-width: 480px) {
-  .center {}
-
+@media (min-width: 1200px) {
   .main {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-
     min-height: 100vh;
     padding: 0;
+  }
+
+  .center {
+
+    display: flex;
+    justify-content: center;
+  }
+
+  .nav {
+    margin-top: 1vh;
   }
 }
 
@@ -54,23 +58,16 @@ import Footer from "./components/Footer.vue";
   }
 }
 
+@media (max-width: 480px) {
+  .center {}
 
-@media (min-width: 1200px) {
   .main {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
     min-height: 100vh;
     padding: 0;
-  }
-
-
-
-  .center {
-
-    display: flex;
-    justify-content: center;
-  }
-
-  .nav {
-    margin-top: 1vh;
   }
 }
 </style>

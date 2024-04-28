@@ -42,6 +42,18 @@ const items = ref([
 
 }
 
+@media (min-width: 768px) and (max-width: 979px){
+  .nav {
+    margin-top: 1vh;
+  }
+}
+
+@media (max-width: 767px) {
+  .nav {
+    margin-top: 1vh;
+  }
+}
+
 @media (max-width: 480px) {
   .nav {
     margin-top: 1vh;
