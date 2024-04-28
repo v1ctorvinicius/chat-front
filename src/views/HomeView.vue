@@ -182,7 +182,70 @@ a {
   color: white;
 }
 
-@media screen and (min-width: 1000px) {
+
+
+
+@media (max-width: 767px) {
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 10vh 5vw;
+    border: 1px solid green;
+    min-height: 50vh;
+
+  }
+
+  .chat-cards-section {
+
+    border: 1px solid red;
+    border-radius: 10px;
+    padding: 2%;
+    margin: 0 2%;
+    flex-grow: 2;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .chat-cards-container {
+    /* border: 10px solid blue; */
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    grid-template-columns: repeat(5, 1fr);
+
+    box-sizing: border-box;
+  }
+
+  .chat-card {}
+
+  #menu {
+    border: 1px solid yellow;
+    margin: 0 2%;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .float-label {
+    margin-top: 10%;
+  }
+
+  .input-text {
+    min-width: 20vw;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 979px) {}
+
+@media (min-width: 1200px) {
 
   .container {
     display: flex;
@@ -217,7 +280,8 @@ a {
     justify-items: center;
     align-items: center;
     grid-template-columns: repeat(5, 1fr);
-
+    gap: 1vw;
+    
     box-sizing: border-box;
   }
 
@@ -240,7 +304,43 @@ a {
   }
 }
 
-.border-radius-10 {
-  border-radius: 10px;
+@media (max-width: 480px) {
+  .menu {
+    margin-top: 1vh;
+    margin-right: 2vw;
+    display: flex;
+    justify-content: end;
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 2;
+    justify-content: space-between;
+    margin: 9vh 2vw;
+    /* border: 1px solid green; */
+    min-height: 89vh;
+
+  }
+  .chat-cards-container {
+    /* border: 10px solid tomato; */
+    padding: 0 2vw 5vh 2vw;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3vw;
+    /* justify-items: center; */
+    /* align-items: center; */
+    /* box-sizing: border-box; */
+
+  }
+
+  .chat-cards-section {
+    border-radius: 10px;
+    
+    margin: 0;
+    flex-grow: 2;
+    display: flex;
+    flex-direction: column;
+  }
+
 }
 </style>

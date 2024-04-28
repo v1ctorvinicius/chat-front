@@ -86,3 +86,28 @@
 .hide {
   display: none;
 }
+
+.center {
+  /* width: 7vh; */
+  /* height: 10vh; */
+  display: flex;
+  justify-content: center;
+}
+/* "I'd recommend taking after Twitter's Bootstrap with just these four media queries" (https://stackoverflow.com/questions/12045893/which-are-the-most-important-media-queries-to-use-in-creating-mobile-responsive) */
+/* Landscape phones and down */
+@media (max-width: 480px) {
+  
+}
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+  
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+}
+
+/* Large desktop */
+@media (min-width: 1200px) {
+}

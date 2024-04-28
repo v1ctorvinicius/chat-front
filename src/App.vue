@@ -8,25 +8,69 @@ import Footer from "./components/Footer.vue";
 <template>
   <div class="vintage main">
     <div class="center">
-
-      <Nav />
+      <Nav class="nav" />
     </div>
     <router-view></router-view>
-    <Footer />
+    <div class="footer">
+      <Footer />
+
+    </div>
   </div>
 </template>
 
 <style scoped>
-@media screen and (min-width: 1000px) {
+@media (max-width: 480px) {
+  .center {}
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    min-height: 100vh;
+    padding: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    min-height: 100vh;
+    padding: 0;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+  .main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    min-height: 100vh;
+    padding: 0;
+  }
+}
+
+
+@media (min-width: 1200px) {
   .main {
     min-height: 100vh;
     padding: 0;
   }
 
+
+
   .center {
+
     display: flex;
     justify-content: center;
   }
 
+  .nav {
+    margin-top: 1vh;
+  }
 }
 </style>

@@ -28,7 +28,7 @@ const items = ref([
     <header>
       <Menubar
         :pt="{ icon: (options) => ({ style: { 'margin-right': '15%' } }), menuitem: (options) => ({ style: { 'display': 'flex', 'justify-content': 'center', 'width': '10vw', 'height': '4vh' } }), label: (options) => ({ style: { 'margin-right': '15px' } }) }"
-        :model="items" class="blue-whale-alpha margin-5 border-radius-10" />
+        :model="items" class="blue-whale-alpha margin-5 border-radius-10" :breakpoint="'480px'" />
     </header>
   </div>
 </template>
@@ -37,7 +37,14 @@ const items = ref([
 .nav {
   z-index: 9999;
   position: fixed;
-  min-height: 4vh;
-  margin-top: 1vh;
+  /* min-height: 4vh; */
+  margin-top: 5vh;
+
+}
+
+@media (max-width: 480px) {
+  .nav {
+    margin-top: 1vh;
   }
+}
 </style>
