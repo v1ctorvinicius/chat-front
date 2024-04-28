@@ -29,7 +29,6 @@ const items = ref([
       <Menubar :pt="{
         button: (options) => ({
           style: {
-            'border': '2px solid tomato',
             'border-radius': '5px',
             'width': '100%',
             // 'display': 'flex',

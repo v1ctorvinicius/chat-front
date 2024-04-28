@@ -8,7 +8,7 @@ import Footer from "./components/Footer.vue";
 <template>
   <div class="vintage main">
     <div class="center">
-      <Nav class="nav" />
+      <Nav class="nav" style="" />
     </div>
     <router-view></router-view>
     <div class="footer">
@@ -68,6 +68,11 @@ import Footer from "./components/Footer.vue";
 
     min-height: 100vh;
     padding: 0;
+  }
+
+  .nav {
+    padding: 0;
+    margin: 0;
   }
 }
 </style>
