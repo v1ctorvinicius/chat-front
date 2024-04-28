@@ -57,9 +57,7 @@ const items = ref([
 .nav {
   z-index: 9999;
   position: fixed;
-  /* min-height: 4vh; */
   margin-top: 5vh;
-
 }
 
 @media (min-width: 768px) and (max-width: 979px) {
@@ -77,7 +75,7 @@ const items = ref([
 
 @media (max-width: 480px) {
   .nav {
-    margin-top: 1vh;
+    margin-top: 1vh !important;
   }
 }
 </style>
