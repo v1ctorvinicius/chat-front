@@ -19,7 +19,7 @@ a i {
   color: white;
   text-decoration: none;
   margin: 10px;
-  font-size: 1.6vw;
+  font-size: 1vw;
 }
 
 footer {
@@ -37,7 +37,7 @@ footer {
     color: white;
     text-decoration: none;
     margin: 10px;
-    font-size: 16vw;
+    font-size: 10vw;
   }
 }
 </style>
