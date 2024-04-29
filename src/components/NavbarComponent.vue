@@ -1,13 +1,30 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
 const items = ref([
   {
+    label: "Home",
+    icon: "pi pi-home",
+    command: () => {
+      router.push({ name: "home" });
+    }
+  },
+  {
     label: "Forums",
-    icon: "pi pi-user-edit"
+    icon: "pi pi-user-edit",
+    command: () => {
+      router.push({ name: "forums" });
+    }
   },
   {
     label: "Chats",
     icon: "pi pi-comments",
+    command: () => {
+      router.push({ name: "home" });
+    }
   },
   {
     label: "Radio",

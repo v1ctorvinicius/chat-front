@@ -15,9 +15,11 @@ function cardClickHandler() {
 
 <template>
   <Card style=" width: 15vw; max-height: 35vh; overflow: hidden" @click="cardClickHandler()"
-    class="card-container my-fadein" :class="{ 'selected': props.selected }" :pt:root:style="' width: 100%; border-radius: 8px'">
+    class="card-container my-fadein" :class="{ 'selected': props.selected }"
+    :pt:root:style="' width: 100%; border-radius: 8px'" :pt:footer:Style="'position: absolute; top : 10%; color: lightgreen'">
     <template #header>
       <img alt="user header" src="https://primefaces.org/cdn/primevue/images/usercard.png" style="width: 100%; " />
+      <!-- <img alt="user header"  src="https://picsum.photos/500/200" style="max-height: 100%; width: 100%; overflow: hidden;" /> -->
     </template>
 
     <template #title>{{ props.chatObject?.name }}</template>
@@ -28,10 +30,7 @@ function cardClickHandler() {
       </p>
     </template>
     <template #footer>
-      <!-- <div class="flex gap-3 mt-1">
-        <Button label="Cancel" severity="secondary" outlined class="w-full" />
-        <Button label="Save" class="w-full" />
-      </div> -->
+      <p>online: 0 </p>
     </template>
   </Card>
 
