@@ -40,7 +40,6 @@ setInterval(() => {
 
 const createChat = () => {
   createChatLoading.value = true;
-  isModalVisible.value = false;
 
   if (newChatName.value.length > 50) {
     toastErrorNameTooLarge.add({ severity: 'error', summary: 'Error', life: 0, detail: 'Chat name cannot be longer than 50 characters, got:  ' + newChatName.value.length });
@@ -51,11 +50,13 @@ const createChat = () => {
   axiosInstance
     .post(url + "/chats/", { name: newChatName.value, password: newChatPassword.value })
     .then((res) => {
+      createChatLoading.value = false;
+      //TODO: check if res.data is valid
       chats.value.push(res.data);
       showSuccessToast();
-      createChatLoading.value = false;
       newChatName.value = "";
       newChatPassword.value = "";
+      isModalVisible.value = false;
     })
     .catch((err) => { console.error(err); showErrorToast(err); createChatLoading.value = false; });
 };
