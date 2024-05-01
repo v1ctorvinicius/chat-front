@@ -48,7 +48,7 @@ const createChat = () => {
   }
 
   axiosInstance
-    .post(url + "/chats/", { name: newChatName.value, password: newChatPassword.value })
+    .post(url + "/chats/", { name: newChatName.value, password: newChatPassword.value, creator: "guest" })
     .then((res) => {
       createChatLoading.value = false;
       //TODO: check if res.data is valid
@@ -58,7 +58,7 @@ const createChat = () => {
       newChatPassword.value = "";
       isModalVisible.value = false;
     })
-    .catch((err) => { console.error(err); showErrorToast(err); createChatLoading.value = false; });
+    .catch((err) => { console.error(err); createChatLoading.value = false; showErrorToast(err); });
 };
 
 const showSuccessToast = () => {
@@ -69,7 +69,7 @@ const showErrorToast = (message: string) => {
   toastError.add({ severity: 'error', summary: 'Error', life: 0, detail: message });
 };
 
-function changeModalVisible() {
+function changeModalVisibility() {
   isModalVisible.value = !isModalVisible.value;
 }
 
@@ -83,7 +83,7 @@ function handleKeyboardKeydown(event: KeyboardEvent) {
 }
 
 function modalCloseButtonHandler() {
-  changeModalVisible();
+  changeModalVisibility();
   selectedCard.value = null;
 }
 
@@ -113,7 +113,7 @@ const showSearchInput = () => {
 
         <h2>There are no chats 😐 </h2>
 
-        <Button @click="changeModalVisible" label="new chat" icon="pi pi-plus" severity="success"
+        <Button @click="changeModalVisibility" label="new chat" icon="pi pi-plus" severity="success"
           style="width: 100%; margin-top: 10%;" />
 
       </div>
@@ -121,7 +121,7 @@ const showSearchInput = () => {
       <main v-else>
         <div class="menu card flex justify-content-center" style="margin-bottom: 2vh;">
           <ButtonGroup>
-            <Button icon="pi pi-plus" @click="changeModalVisible" />
+            <Button icon="pi pi-plus" @click="changeModalVisibility" />
             <Button icon="pi pi-search" />
             <Button icon="pi pi-cog" />
           </ButtonGroup>
