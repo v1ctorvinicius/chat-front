@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 import axios from "axios";
 
@@ -34,9 +34,9 @@ axiosInstance.get(url + "/chats/").then((res) => (chats.value = res.data));
 
 const createChatLoading = ref(false);
 
-setInterval(() => {
-  axiosInstance.get(url + "/chats/").then((res) => chats.value = res.data);
-}, 10000);
+// setInterval(() => {
+//   axiosInstance.get(url + "/chats/").then((res) => chats.value = res.data);
+// }, 10000);
 
 const createChat = () => {
   createChatLoading.value = true;
@@ -100,6 +100,20 @@ function showMenuInput() {
 const showSearchInput = () => {
 
 }
+
+
+import io from "socket.io-client";
+
+let socket = null;
+
+socket = io("http://localhost:8080")
+
+socket.on("chatCreated", (res) => {
+  
+  chats.value = res;
+  console.log("chatCreated: ", chats.value);
+
+})
 
 </script>
 
