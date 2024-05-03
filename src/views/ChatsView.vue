@@ -52,7 +52,6 @@ const createChat = () => {
     .then((res) => {
       createChatLoading.value = false;
       //TODO: check if res.data is valid
-      chats.value.push(res.data);
       showSuccessToast();
       newChatName.value = "";
       newChatPassword.value = "";
@@ -111,7 +110,7 @@ socket = io("http://localhost:8080")
 socket.on("chatCreated", (res) => {
   
   chats.value = res;
-  console.log("chatCreated: ", chats.value);
+  console.log("socket! ");
 
 })
 
