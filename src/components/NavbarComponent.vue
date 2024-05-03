@@ -23,7 +23,7 @@ const items = ref([
     label: "Chats",
     icon: "pi pi-comments",
     command: () => {
-      router.push({ name: "home" });
+      router.push({ name: "chats" });
     }
   },
   {

@@ -9,20 +9,20 @@ const router = createRouter({
       component: () => import("../views/HomeView.vue"),
     },
     {
-      path: "/chat",
-      name: "chat",
-      component: () => import("../views/ChatView.vue"),
-    },
-    {
       path: "/forums",
       name: "forums",
-      component: () => import("../views/ForumView.vue"),
+      component: () => import("../views/ForumsView.vue"),
+    },
+    {
+      path: "/chats",
+      name: "chats",
+      component: () => import("../views/ChatsView.vue"),
     },
     {
       path: "/:pathMatch(.*)*",
       name: "notfound",
       component: () => import("../views/NotFound.vue"),
-    }
+    },
   ],
 });
 
