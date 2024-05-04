@@ -10,6 +10,8 @@ import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
 import { useToast } from 'primevue/usetoast';
 
+import io from "socket.io-client";
+
 const toastSuccess = useToast();
 const toastError = useToast();
 const toastErrorNameTooLarge = useToast();
@@ -30,13 +32,11 @@ const url: string = import.meta.env.VITE_API_BASE_URL;
 
 //TODO: cachear a lista de chats
 const axiosInstance = axios.create({ timeout: 10000 });
-axiosInstance.get(url + "/api/chats/").then((res) => (chats.value = res.data));
+onMounted(() => {
+  axiosInstance.get(url + "/api/chats/").then((res) => (chats.value = res.data));
+})
 
 const createChatLoading = ref(false);
-
-// setInterval(() => {
-//   axiosInstance.get(url + "/chats/").then((res) => chats.value = res.data);
-// }, 10000);
 
 const createChat = () => {
   createChatLoading.value = true;
@@ -89,24 +89,12 @@ function modalCloseButtonHandler() {
 document.addEventListener("keydown", (event) => {
   handleKeyboardKeydown(event);
 });
-;
-// document.addEventListener("keydown", (event) => handleKeyboardKeydown);
 
-function showMenuInput() {
-
-}
-
-const showSearchInput = () => {
-
-}
+const showSearchInput = () => { }
 
 
-import io from "socket.io-client";
 
-let socket = null;
-
-socket = io(url)
-
+const socket = io(url);
 socket.on("chatCreated", (res) => {
   chats.value = res;
 })
@@ -146,6 +134,7 @@ socket.on("chatCreated", (res) => {
     </section>
   </div>
 
+  <!-- modal for creating new chat -->
   <Dialog :visible="isModalVisible" modal :header="modalTitle" :pt:mask:style="{ 'backdrop-filter': 'blur(5px)' }"
     :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'"
     :pt:closeButton:onClick="modalCloseButtonHandler">
@@ -193,14 +182,12 @@ a {
     flex-direction: column;
     justify-content: space-between;
     margin: 10vh 5vw;
-    /* border: 1px solid green; */
     min-height: 88vh;
 
   }
 
   .chat-cards-section {
 
-    /* border: 1px solid red; */
     border-radius: 10px;
     padding: 2%;
     margin: 0 2%;
@@ -216,10 +203,8 @@ a {
   }
 
   .chat-cards-container {
-    /* border: 1px solid blue; */
     display: grid;
     justify-items: center;
-    /* align-items: center; */
     grid-template-columns: repeat(5, 1fr);
     gap: 1vw;
 
@@ -229,7 +214,6 @@ a {
   .chat-card {}
 
   #menu {
-    /* border: 1px solid yellow; */
     margin: 0 2%;
     border-radius: 10px;
     display: flex;
