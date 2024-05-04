@@ -30,7 +30,7 @@ const url: string = import.meta.env.VITE_API_BASE_URL;
 
 //TODO: cachear a lista de chats
 const axiosInstance = axios.create({ timeout: 10000 });
-axiosInstance.get(url + "/chats/").then((res) => (chats.value = res.data));
+axiosInstance.get(url + "/api/chats/").then((res) => (chats.value = res.data));
 
 const createChatLoading = ref(false);
 
@@ -48,7 +48,7 @@ const createChat = () => {
   }
 
   axiosInstance
-    .post(url + "/chats/", { name: newChatName.value, password: newChatPassword.value, creator: "guest" })
+    .post(url + "/api/chats/", { name: newChatName.value, password: newChatPassword.value, creator: "guest" })
     .then((res) => {
       createChatLoading.value = false;
       //TODO: check if res.data is valid
@@ -105,13 +105,10 @@ import io from "socket.io-client";
 
 let socket = null;
 
-socket = io("http://localhost:8080")
+socket = io(url)
 
 socket.on("chatCreated", (res) => {
-  
   chats.value = res;
-  console.log("socket! ");
-
 })
 
 </script>
