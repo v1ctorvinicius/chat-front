@@ -17,14 +17,15 @@ const toastError = useToast();
 const toastErrorNameTooLarge = useToast();
 
 const chats = ref<chat[]>([]);
-const selectedCard = ref<chat | null>(null);
-let chatCount = 0;
-let cardIndex = 0;
+const openChats = ref<chat[]>([]);
+const selectedCard = ref<chat | null | undefined>(null);
 
 const newChatName = ref("");
 const newChatPassword = ref("");
-const modalTitle = ref("New chat");
-const isModalVisible = ref(false);
+// const modalTitle = ref("New chat");
+const isCreateChatModalVisible = ref(false);
+
+//TODO: esses computeds nao ajudam muito
 const isNewChatPasswordInvalid = computed(() => newChatPassword.value.length > 50);
 const isNewChatNameInvalid = computed(() => newChatName.value.length > 50);
 
@@ -40,7 +41,6 @@ onMounted(() => {
 const createChatLoading = ref(false);
 
 const createChat = () => {
-  console.log("isnewchatnameinvalid: ", isNewChatNameInvalid.value);
   createChatLoading.value = true;
 
   if (newChatName.value.length > 50) {
@@ -57,7 +57,7 @@ const createChat = () => {
       showSuccessToast();
       newChatName.value = "";
       newChatPassword.value = "";
-      isModalVisible.value = false;
+      isCreateChatModalVisible.value = false;
     })
     .catch((err) => { console.error(err); createChatLoading.value = false; showErrorToast(err); });
 };
@@ -70,21 +70,20 @@ const showErrorToast = (message: string) => {
   toastError.add({ severity: 'error', summary: 'Error', life: 0, detail: message });
 };
 
-function changeModalVisibility() {
-  isModalVisible.value = !isModalVisible.value;
+function changeCreateChatModalVisibility() {
+  isCreateChatModalVisible.value = !isCreateChatModalVisible.value;
 }
 
 function handleKeyboardKeydown(event: KeyboardEvent) {
-
   if (event.repeat) return;
   if (event.key === "Escape") {
-    isModalVisible.value = false;
-    selectedCard.value = null;
+    isCreateChatModalVisible.value = false;
+    openChats.value = [];
   }
 }
 
-function modalCloseButtonHandler() {
-  changeModalVisibility();
+function modalCreateChatCloseButtonHandler() {
+  changeCreateChatModalVisibility();
   selectedCard.value = null;
 }
 
@@ -94,101 +93,90 @@ document.addEventListener("keydown", (event) => {
 
 const showSearchInput = () => { }
 
-
-
 const socket = io(baseUrl);
 socket.on("chatCreated", (res) => {
   chats.value = res;
 })
 
+
+const chatCardClickHandler = (chatObject: chat) => {
+  
+  const newSelectedCard = chats.value.find((chat) => chat.id == chatObject?.id);
+
+  if (!newSelectedCard) {
+    return;
+  }
+
+  selectedCard.value = newSelectedCard;
+  
+  // remove from openChats if already open
+  if (openChats.value.includes(newSelectedCard)) {
+    openChats.value = openChats.value.filter((chat) => chat.id != newSelectedCard.id);
+    return;
+  }
+
+  // add to openChats if not open yet
+  openChats.value.push(newSelectedCard);
+}
+
 </script>
 
 <template>
-
   <div class="container text-white">
-
-
     <section class="chat-cards-section blue-whale-alpha" :class="{ 'empty': chats.length == 0 }">
       <div v-if="chats.length == 0">
-
         <h2>There are no chats 😐 </h2>
-
-        <Button @click="changeModalVisibility" label="new chat" icon="pi pi-plus" severity="success"
-          style="width: 100%; margin-top: 10%;" />
-
+        <Button @click="changeCreateChatModalVisibility" label="new chat" icon="pi pi-plus" severity="success" style="width: 100%; margin-top: 10%;" />
       </div>
 
       <main v-else>
         <div class="menu card flex justify-content-center" style="margin-bottom: 2vh;">
           <ButtonGroup>
-            <Button icon="pi pi-plus" @click="changeModalVisibility" />
+            <Button icon="pi pi-plus" @click="changeCreateChatModalVisibility" />
             <Button icon="pi pi-search" />
             <Button icon="pi pi-cog" />
           </ButtonGroup>
         </div>
         <div class="chat-cards-container">
-
-          <ChatCard class="chat-card" v-for="chat in chats" @change-visible="" :chatObject="chat"
-            @click="selectedCard = chat" :selected="selectedCard == chat" />
-
+          <ChatCard class="chat-card" v-for="chat in chats" @chat-card-click="(chatObject)=>chatCardClickHandler(chatObject)" :chatObject="chat" @click="selectedCard = chat" :selected="openChats.includes(chat)" />
         </div>
       </main>
     </section>
   </div>
 
   <!-- modal for creating new chat -->
-  <Dialog :visible="isModalVisible" modal :header="modalTitle" :pt:mask:style="{ 'backdrop-filter': 'blur(5px)' }"
-    :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'"
-    :pt:closeButton:onClick="modalCloseButtonHandler">
-    <div class="d-flex flex-column justify-content-between" style="margin-top: 10px;">
-      <FloatLabel class="float-label">
-        <label for="new-chat-name-input-text">Enter new chat name</label>
-        <InputText class="input-text" id="new-chat-name-input-text" type="text" :pt:root:autofocus="true"
-          :invalid="isNewChatNameInvalid" v-model="newChatName"
-          @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
-      </FloatLabel>
+  <Dialog :visible="isCreateChatModalVisible" modal header="Create new chat" :pt:mask:style="{ 'backdrop-filter': 'blur(5px)' }" :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'" :pt:closeButton:onClick="modalCreateChatCloseButtonHandler">
+    <FloatLabel class="float-label">
+      <label for="new-chat-name-input-text">Enter new chat name</label>
+      <InputText class="input-text" id="new-chat-name-input-text" type="text" :pt:root:autofocus="true" :invalid="isNewChatNameInvalid" v-model="newChatName" @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
+    </FloatLabel>
 
-      <FloatLabel class="float-label">
-        <label for="new-chat-password-input-text">Enter password</label>
-        <InputText class="input-text" id="new-chat-password-input-text" type="text" :invalid="isNewChatPasswordInvalid"
-          v-model="newChatPassword" @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
-
-      </FloatLabel>
-    </div>
+    <FloatLabel class="float-label">
+      <label for="new-chat-password-input-text">Enter password</label>
+      <InputText class="input-text" id="new-chat-password-input-text" type="text" :invalid="isNewChatPasswordInvalid" v-model="newChatPassword" @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
+    </FloatLabel>
     <template #footer>
-      <div class="p-d-flex p-jc-end">
-        <Button @click="createChat" :loading="createChatLoading" label="Create" severity="success" icon="pi pi-check" />
-      </div>
+      <Button @click="createChat" :loading="createChatLoading" label="Create" severity="success" icon="pi pi-check" />
     </template>
 
   </Dialog>
 
   <!-- modal for opening chat -->
-  <Dialog :visible="isModalVisible" modal :header="modalTitle" :pt:mask:style="{ 'backdrop-filter': 'blur(5px)' }"
-    :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'"
-    :pt:closeButton:onClick="modalCloseButtonHandler">
-    <div class="d-flex flex-column justify-content-between" style="margin-top: 10px;">
-      <FloatLabel class="float-label">
-        <label for="new-chat-name-input-text">Enter new chat name</label>
-        <InputText class="input-text" id="new-chat-name-input-text" type="text" :pt:root:autofocus="true"
-          :invalid="isNewChatNameInvalid" v-model="newChatName"
-          @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
-      </FloatLabel>
 
-      <FloatLabel class="float-label">
-        <label for="new-chat-password-input-text">Enter password</label>
-        <InputText class="input-text" id="new-chat-password-input-text" type="text" :invalid="isNewChatPasswordInvalid"
-          v-model="newChatPassword" @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
-
-      </FloatLabel>
-    </div>
+  <!-- https://forum.primefaces.og/viewtopic.php?t=60072 -->
+  <!--  -->
+  <!--  -->
+  <!-- "sidebar how to remove mask"  -->
+  <!--  -->
+  <Dialog v-for="chat in openChats" :visible="openChats.includes(chat)" :modal=false :header="chat.name" :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'" :pt:content:style="'padding-top: 10px; display: flex; flex-direction: column;'" :pt:closeButton:onClick="() => { openChats = openChats.filter((chat) => chat.id != chat.id) }" :pt:mask:style="{}">
+    <label for="new-chat-name-input-text">Enter new chat name</label>
+    <InputText class="input-text" id="new-chat-name-input-text" type="text" :pt:root:autofocus="true" :invalid="isNewChatNameInvalid" v-model="newChatName" @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
     <template #footer>
-      <div class="p-d-flex p-jc-end">
-        <Button @click="createChat" :loading="createChatLoading" label="Create" severity="success" icon="pi pi-check" />
-      </div>
+    <Button @click="sendMessage" :loading="sendMessageLoading" label="Send" severity="success" icon="pi pi-send" />
     </template>
-
   </Dialog>
+
+
   <Toast position="bottom-left" />
 </template>
 
