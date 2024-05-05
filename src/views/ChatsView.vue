@@ -138,7 +138,7 @@ const chatCardClickHandler = (chatObject: chat) => {
           </ButtonGroup>
         </div>
         <div class="chat-cards-container">
-          <ChatCard class="chat-card" v-for="chat in chats" @chat-card-click="(chatObject)=>chatCardClickHandler(chatObject)" :chatObject="chat" @click="selectedCard = chat" :selected="openChats.includes(chat)" />
+          <ChatCard :class="{ 'on-chats-open': openChats.includes(chat) }" v-for="chat in chats" @chat-card-click="(chatObject)=>chatCardClickHandler(chatObject)" :chatObject="chat" @click="selectedCard = chat" :selected="openChats.includes(chat)" />
         </div>
       </main>
     </section>
@@ -185,6 +185,11 @@ a {
   color: white;
 }
 
+.on-chats-open {
+  box-shadow: rgba(236, 233, 4, 0.4) 5px 5px, rgba(24, 187, 65, 0.3) 10px 10px,
+    rgba(51, 211, 2, 0.2) 15px 15px, rgba(46, 240, 208, 0.1) 20px 20px,
+      rgba(139, 106, 231, 0.1) 25px 25px !important;
+}
 
 @media (min-width: 1200px) {
 
