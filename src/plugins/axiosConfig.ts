@@ -15,7 +15,7 @@ const createAxiosInstance = (): AxiosInstance => {
     (config) => config,
     (error) => {
       if (axios.isCancel(error)) {
-        console.log('Request canceled:', error.message);
+        console.error('Request canceled:', error.message);
       }
       return Promise.reject(error);
     }
