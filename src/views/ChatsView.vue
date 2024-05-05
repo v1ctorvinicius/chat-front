@@ -28,17 +28,19 @@ const isModalVisible = ref(false);
 const isNewChatPasswordInvalid = computed(() => newChatPassword.value.length > 50);
 const isNewChatNameInvalid = computed(() => newChatName.value.length > 50);
 
-const url: string = import.meta.env.VITE_API_BASE_URL;
+const apiBaseUrl: string = import.meta.env.VITE_API_BASE_URL;
+const baseUrl: string = import.meta.env.VITE_BASE_URL;
 
 //TODO: cachear a lista de chats
 const axiosInstance = axios.create({ timeout: 10000 });
 onMounted(() => {
-  axiosInstance.get(url + "/api/chats/").then((res) => (chats.value = res.data));
+  axiosInstance.get(apiBaseUrl + "/chats/").then((res) => (chats.value = res.data));
 })
 
 const createChatLoading = ref(false);
 
 const createChat = () => {
+  console.log("isnewchatnameinvalid: ", isNewChatNameInvalid.value);
   createChatLoading.value = true;
 
   if (newChatName.value.length > 50) {
@@ -48,7 +50,7 @@ const createChat = () => {
   }
 
   axiosInstance
-    .post(url + "/api/chats/", { name: newChatName.value, password: newChatPassword.value, creator: "guest" })
+    .post(apiBaseUrl + "/chats/", { name: newChatName.value, password: newChatPassword.value, creator: "guest" })
     .then((res) => {
       createChatLoading.value = false;
       //TODO: check if res.data is valid
@@ -94,7 +96,7 @@ const showSearchInput = () => { }
 
 
 
-const socket = io(url);
+const socket = io(baseUrl);
 socket.on("chatCreated", (res) => {
   chats.value = res;
 })
@@ -140,23 +142,43 @@ socket.on("chatCreated", (res) => {
     :pt:closeButton:onClick="modalCloseButtonHandler">
     <div class="d-flex flex-column justify-content-between" style="margin-top: 10px;">
       <FloatLabel class="float-label">
-        <label for="new-chat-name-txt">Enter new chat name</label>
-        <InputText :pt:root:autofocus="true" class="input-text" id="new-chat-name-txt" type="text"
-          :invalid="isNewChatNameInvalid" v-model="newChatName" @keydown.enter="(event) => {
-            if (event.repeat) return;
-            createChat()
-          }" />
-
+        <label for="new-chat-name-input-text">Enter new chat name</label>
+        <InputText class="input-text" id="new-chat-name-input-text" type="text" :pt:root:autofocus="true"
+          :invalid="isNewChatNameInvalid" v-model="newChatName"
+          @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
       </FloatLabel>
 
       <FloatLabel class="float-label">
-        <label for="new-chat-password-txt">Enter password</label>
-        <InputText class="input-text" id="new-chat-password-txt" type="text" :invalid="isNewChatPasswordInvalid"
-          v-model="newChatPassword" @keydown.enter="(event) => {
-            if (event.repeat) return;
-            createChat()
+        <label for="new-chat-password-input-text">Enter password</label>
+        <InputText class="input-text" id="new-chat-password-input-text" type="text" :invalid="isNewChatPasswordInvalid"
+          v-model="newChatPassword" @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
 
-          }" />
+      </FloatLabel>
+    </div>
+    <template #footer>
+      <div class="p-d-flex p-jc-end">
+        <Button @click="createChat" :loading="createChatLoading" label="Create" severity="success" icon="pi pi-check" />
+      </div>
+    </template>
+
+  </Dialog>
+
+  <!-- modal for opening chat -->
+  <Dialog :visible="isModalVisible" modal :header="modalTitle" :pt:mask:style="{ 'backdrop-filter': 'blur(5px)' }"
+    :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'"
+    :pt:closeButton:onClick="modalCloseButtonHandler">
+    <div class="d-flex flex-column justify-content-between" style="margin-top: 10px;">
+      <FloatLabel class="float-label">
+        <label for="new-chat-name-input-text">Enter new chat name</label>
+        <InputText class="input-text" id="new-chat-name-input-text" type="text" :pt:root:autofocus="true"
+          :invalid="isNewChatNameInvalid" v-model="newChatName"
+          @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
+      </FloatLabel>
+
+      <FloatLabel class="float-label">
+        <label for="new-chat-password-input-text">Enter password</label>
+        <InputText class="input-text" id="new-chat-password-input-text" type="text" :invalid="isNewChatPasswordInvalid"
+          v-model="newChatPassword" @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
 
       </FloatLabel>
     </div>
@@ -174,6 +196,7 @@ socket.on("chatCreated", (res) => {
 a {
   color: white;
 }
+
 
 @media (min-width: 1200px) {
 
@@ -210,8 +233,6 @@ a {
 
     box-sizing: border-box;
   }
-
-  .chat-card {}
 
   #menu {
     margin: 0 2%;
@@ -284,6 +305,7 @@ a {
   }
 }
 
+
 @media (max-width: 767px) {
 
   .container {
@@ -338,9 +360,6 @@ a {
     min-width: 20vw;
   }
 }
-
-
-
 
 
 @media (max-width: 480px) {
