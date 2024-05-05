@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import ChatCard from "@/components/ChatCard.vue";
+import Message from "@/components/Message.vue";
+import type chat from "@/types/chat";
+
 import { computed, onMounted, ref } from "vue";
 
 import axios from "axios";
-
-import ChatCard from "@/components/ChatCard.vue";
-import type chat from "../types/chat";
 
 import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
@@ -163,17 +164,21 @@ const chatCardClickHandler = (chatObject: chat) => {
 
   <!-- modal for opening chat -->
 
-  <!-- https://forum.primefaces.og/viewtopic.php?t=60072 -->
-  <!--  -->
-  <!--  -->
   <!-- "sidebar how to remove mask"  -->
   <!--  -->
+  <!--  -->
+  <!--  https://forum.primefaces.og/viewtopic.php?t=60072 -->
+  <!--  -->
   <Dialog v-for="chat in openChats" :visible="openChats.includes(chat)" :modal=false :header="chat.name" :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'" :pt:content:style="'padding-top: 10px; display: flex; flex-direction: column;'" :pt:closeButton:onClick="() => { openChats = openChats.filter((chat) => chat.id != chat.id) }" :pt:mask:style="{}">
-    <label for="new-chat-name-input-text">Enter new chat name</label>
-    <InputText class="input-text" id="new-chat-name-input-text" type="text" :pt:root:autofocus="true" :invalid="isNewChatNameInvalid" v-model="newChatName" @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
-    <template #footer>
-    <Button @click="sendMessage" :loading="sendMessageLoading" label="Send" severity="success" icon="pi pi-send" />
-    </template>
+    
+    <div class="messages-container">
+      <Message v-for="message in chat.messages" :key="message.id" :message="message.content" />
+    </div>
+    <div style="display: flex;">
+      <InputText class="input-text" id="new-chat-name-input-text" type="text" :pt:root:autofocus="true" :invalid="isNewChatNameInvalid" v-model="newChatName" @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
+      <Button @click="sendMessage" :loading="sendMessageLoading" label="Send" severity="success" icon="pi pi-send" />
+    </div>
+    <template #footer></template>
   </Dialog>
 
 
@@ -189,6 +194,14 @@ a {
   box-shadow: rgba(236, 233, 4, 0.4) 5px 5px, rgba(24, 187, 65, 0.3) 10px 10px,
     rgba(51, 211, 2, 0.2) 15px 15px, rgba(46, 240, 208, 0.1) 20px 20px,
       rgba(139, 106, 231, 0.1) 25px 25px !important;
+}
+
+.messages-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  background-color: tomato;
 }
 
 @media (min-width: 1200px) {
