@@ -6,12 +6,14 @@ import type chat from "@/types/chat";
 import { computed, onMounted, ref } from "vue";
 
 import axios from "axios";
+import axiosInstance from "@/plugins/axiosConfig";
 
 import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
 import { useToast } from 'primevue/usetoast';
 
 import io from "socket.io-client";
+import type message from "@/types/Message";
 
 const toastSuccess = useToast();
 const toastError = useToast();
@@ -19,11 +21,13 @@ const toastErrorNameTooLarge = useToast();
 
 const chats = ref<chat[]>([]);
 const openChats = ref<chat[]>([]);
+const dratfs = ref<string[]>([]);
 const selectedCard = ref<chat | null | undefined>(null);
 
 const newChatName = ref("");
 const newChatPassword = ref("");
 // const modalTitle = ref("New chat");
+const createChatLoading = ref(false);
 const isCreateChatModalVisible = ref(false);
 
 //TODO: esses computeds nao ajudam muito
@@ -34,12 +38,11 @@ const apiBaseUrl: string = import.meta.env.VITE_API_BASE_URL;
 const baseUrl: string = import.meta.env.VITE_BASE_URL;
 
 //TODO: cachear a lista de chats
-const axiosInstance = axios.create({ timeout: 10000 });
+
 onMounted(() => {
   axiosInstance.get(apiBaseUrl + "/chats/").then((res) => (chats.value = res.data));
 })
 
-const createChatLoading = ref(false);
 
 const createChat = () => {
   createChatLoading.value = true;
@@ -101,7 +104,7 @@ socket.on("chatCreated", (res) => {
 
 
 const chatCardClickHandler = (chatObject: chat) => {
-  
+
   const newSelectedCard = chats.value.find((chat) => chat.id == chatObject?.id);
 
   if (!newSelectedCard) {
@@ -109,7 +112,7 @@ const chatCardClickHandler = (chatObject: chat) => {
   }
 
   selectedCard.value = newSelectedCard;
-  
+
   // remove from openChats if already open
   if (openChats.value.includes(newSelectedCard)) {
     openChats.value = openChats.value.filter((chat) => chat.id != newSelectedCard.id);
@@ -120,6 +123,21 @@ const chatCardClickHandler = (chatObject: chat) => {
   openChats.value.push(newSelectedCard);
 }
 
+const sendMessage = (message: string, chatId: number) => {
+  console.log("sendMessage", message);
+  let newMessage: message = {
+    id: Math.random(),
+    chatId: chatId,
+    content: message,
+    userId: 1,
+    timestamp: new Date().toLocaleString(),
+    sender: "localhost",
+  }
+
+  socket.emit("message", newMessage);
+  // axiosInstance.post(apiBaseUrl + "/chats/send-message/" + chatId , { content: message });
+}
+
 </script>
 
 <template>
@@ -127,7 +145,8 @@ const chatCardClickHandler = (chatObject: chat) => {
     <section class="chat-cards-section blue-whale-alpha" :class="{ 'empty': chats.length == 0 }">
       <div v-if="chats.length == 0">
         <h2>There are no chats 😐 </h2>
-        <Button @click="changeCreateChatModalVisibility" label="new chat" icon="pi pi-plus" severity="success" style="width: 100%; margin-top: 10%;" />
+        <Button @click="changeCreateChatModalVisibility" label="new chat" icon="pi pi-plus" severity="success"
+          style="width: 100%; margin-top: 10%;" />
       </div>
 
       <main v-else>
@@ -139,22 +158,29 @@ const chatCardClickHandler = (chatObject: chat) => {
           </ButtonGroup>
         </div>
         <div class="chat-cards-container">
-          <ChatCard :class="{ 'on-chats-open': openChats.includes(chat) }" v-for="chat in chats" @chat-card-click="(chatObject)=>chatCardClickHandler(chatObject)" :chatObject="chat" @click="selectedCard = chat" :selected="openChats.includes(chat)" />
+          <ChatCard :class="{ 'on-chats-open': openChats.includes(chat) }" v-for="chat in chats"
+            @chat-card-click="(chatObject) => chatCardClickHandler(chatObject)" :chatObject="chat"
+            @click="selectedCard = chat" :selected="openChats.includes(chat)" />
         </div>
       </main>
     </section>
   </div>
 
   <!-- modal for creating new chat -->
-  <Dialog :visible="isCreateChatModalVisible" modal header="Create new chat" :pt:mask:style="{ 'backdrop-filter': 'blur(5px)' }" :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'" :pt:closeButton:onClick="modalCreateChatCloseButtonHandler">
+  <Dialog :visible="isCreateChatModalVisible" modal header="Create new chat"
+    :pt:mask:style="{ 'backdrop-filter': 'blur(5px)' }" :pt:title:style="'color:tomato;'"
+    :pt:header:style="'color: white;'" :pt:closeButton:onClick="modalCreateChatCloseButtonHandler">
     <FloatLabel class="float-label">
       <label for="new-chat-name-input-text">Enter new chat name</label>
-      <InputText class="input-text" id="new-chat-name-input-text" type="text" :pt:root:autofocus="true" :invalid="isNewChatNameInvalid" v-model="newChatName" @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
+      <InputText class="input-text" id="new-chat-name-input-text" type="text" :pt:root:autofocus="true"
+        :invalid="isNewChatNameInvalid" v-model="newChatName"
+        @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
     </FloatLabel>
 
     <FloatLabel class="float-label">
       <label for="new-chat-password-input-text">Enter password</label>
-      <InputText class="input-text" id="new-chat-password-input-text" type="text" :invalid="isNewChatPasswordInvalid" v-model="newChatPassword" @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
+      <InputText class="input-text" id="new-chat-password-input-text" type="text" :invalid="isNewChatPasswordInvalid"
+        v-model="newChatPassword" @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
     </FloatLabel>
     <template #footer>
       <Button @click="createChat" :loading="createChatLoading" label="Create" severity="success" icon="pi pi-check" />
@@ -169,14 +195,20 @@ const chatCardClickHandler = (chatObject: chat) => {
   <!--  -->
   <!--  https://forum.primefaces.og/viewtopic.php?t=60072 -->
   <!--  -->
-  <Dialog v-for="chat in openChats" :visible="openChats.includes(chat)" :modal=false :header="chat.name" :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'" :pt:content:style="'padding-top: 10px; display: flex; flex-direction: column;'" :pt:closeButton:onClick="() => { openChats = openChats.filter((chat) => chat.id != chat.id) }" :pt:mask:style="{}">
-    
+  <Dialog v-for="chat in openChats" :visible="openChats.includes(chat)" :modal=false :header="chat.name"
+    :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'"
+    :pt:content:style="'padding-top: 10px; display: flex; flex-direction: column;'"
+    :pt:closeButton:onClick="() => { openChats = openChats.filter((chat) => chat.id != chat.id) }" :pt:mask:style="{}">
+
     <div class="messages-container">
-      <Message v-for="message in chat.messages" :key="message.id" :message="message.content" />
+      <Message v-for="message in chat.messages" :key="message.id" :message="message.sender + ' > ' + message.content" />
     </div>
     <div style="display: flex;">
-      <InputText class="input-text" id="new-chat-name-input-text" type="text" :pt:root:autofocus="true" :invalid="isNewChatNameInvalid" v-model="newChatName" @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
-      <Button @click="sendMessage" :loading="sendMessageLoading" label="Send" severity="success" icon="pi pi-send" />
+      <InputText v-model="dratfs[0]" class="input-text" id="new-chat-name-input-text" type="text"
+        :pt:root:autofocus="true" :invalid="isNewChatNameInvalid"
+        @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
+      <Button @click="sendMessage(dratfs[0], chat.id)" :loading="false" label="Send" severity="success"
+        icon="pi pi-send" />
     </div>
     <template #footer></template>
   </Dialog>
@@ -193,7 +225,7 @@ a {
 .on-chats-open {
   box-shadow: rgba(236, 233, 4, 0.4) 5px 5px, rgba(24, 187, 65, 0.3) 10px 10px,
     rgba(51, 211, 2, 0.2) 15px 15px, rgba(46, 240, 208, 0.1) 20px 20px,
-      rgba(139, 106, 231, 0.1) 25px 25px !important;
+    rgba(139, 106, 231, 0.1) 25px 25px !important;
 }
 
 .messages-container {
@@ -201,7 +233,7 @@ a {
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
-  background-color: tomato;
+
 }
 
 @media (min-width: 1200px) {
