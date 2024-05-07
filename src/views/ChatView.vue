@@ -6,18 +6,18 @@ import type Message from '../types/Message';
 let messages = ref<Message[]>([]);
 
 //TODO: implementar rolagem de dados generica, tem apenas 2d6
-const rollDice = () => {
-    axios.get("http://localhost:8081/dices/2d6").then((res) => {
-        let message = "dado 1: " + res.data.dices[0] + "\n dado 2: " + res.data.dices[1] + "\ntotal: " + res.data.total;
-        let newMessage: Message = {
-            id: Math.random().toString(),
-            sender: "localhost",
-            content: message,
-            timestamp: Date.now(),
-        }
-        messages.value.push(newMessage);
-    })
-}
+// const rollDice = () => {
+//     axios.get("http://localhost:8081/dices/2d6").then((res) => {
+//         let message = "dado 1: " + res.data.dices[0] + "\n dado 2: " + res.data.dices[1] + "\ntotal: " + res.data.total;
+//         let newMessage: Message = {
+//             id: Math.random().toString(),
+//             sender: "localhost",
+//             content: message,
+//             timestamp: Date.now(),
+//         }
+//         messages.value.push(newMessage);
+//     })
+// }
 </script>
 
 <template>
@@ -29,7 +29,7 @@ const rollDice = () => {
                 <textarea v-if="messages[0]" v-model="messages[0].content"></textarea>
             </div>
             <div class="actions">
-                <n-button @click="rollDice" type="primary">Rolar dados</n-button>
+                <n-button @click="'rollDice'" type="primary">Rolar dados</n-button>
             </div>
 
         </div>

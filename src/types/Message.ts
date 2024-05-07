@@ -1,6 +1,8 @@
 export default interface Message {
-  id: string;
-  sender: string;
+  id: number;
+  chatId: number;
   content: string;
-  timestamp: number;
+  userId: number;
+  timestamp: string;
+  sender: string;
 }

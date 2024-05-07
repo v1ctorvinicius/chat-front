@@ -6,17 +6,15 @@ const props = defineProps({
   selected: Boolean
 });
 
-const emit = defineEmits(["changeVisible"]);
+const emit = defineEmits(["chatCardClick"]);
 
 function cardClickHandler() {
-  emit("changeVisible", props.chatObject?.name);
+  emit("chatCardClick", props.chatObject);  
 }
 </script>
 
 <template>
-  <Card style=" width: 15vw; max-height: 35vh; overflow: hidden" @click="cardClickHandler()"
-    class="card-container my-fadein" :class="{ 'selected': props.selected }"
-    :pt:root:style="' width: 100%; border-radius: 8px'" :pt:footer:Style="'position: absolute; top : 10%; color: lightgreen'">
+  <Card style=" width: 15vw; max-height: 35vh; overflow: hidden" @click="cardClickHandler()" class="card-container my-fadein" :class="{ 'selected': props.selected }" :pt:root:style="' width: 100%; border-radius: 8px'" :pt:footer:Style="'position: absolute; top : 10%; color: lightgreen'">
     <template #header>
       <img alt="user header" src="https://primefaces.org/cdn/primevue/images/usercard.png" style="width: 100%; " />
       <!-- <img alt="user header"  src="https://picsum.photos/500/200" style="max-height: 100%; width: 100%; overflow: hidden;" /> -->
