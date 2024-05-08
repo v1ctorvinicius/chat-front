@@ -6,7 +6,10 @@ export const useChatStore = defineStore("chatStore", () => {
   const openChats = ref<Chat[]>([]);
 
   function removeOpenChat(chat: Chat) {
-    openChats.value = openChats.value.filter((c) => c.id != chat.id);
+    const index = openChats.value.findIndex((c) => c.id === chat.id);
+    if (index !== -1) {
+      openChats.value.splice(index, 1);
+    }
   }
 
   return { openChats, removeOpenChat };

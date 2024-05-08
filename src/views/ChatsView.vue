@@ -122,7 +122,7 @@ const chatCardClickHandler = (chatObject: Chat) => {
     return;
   }
 
-  selectedCard.value = newSelectedChat;
+  // selectedCard.value = newSelectedChat;
 
   // remove from openChats if already open
   if (chatStore.openChats.includes(newSelectedChat)) {
@@ -179,7 +179,7 @@ const chatCardClickHandler = (chatObject: Chat) => {
         <div class="chat-cards-container">
           <ChatCard :class="{ 'on-chats-open': chatStore.openChats.includes(chat) }" v-for="chat in chats"
             @chat-card-click="(chatObject) => chatCardClickHandler(chatObject)" :chatObject="chat"
-            @click="selectedCard = chat" :selected="chatStore.openChats.includes(chat)" />
+            :selected="chatStore.openChats.includes(chat)" />
         </div>
       </main>
     </section>
