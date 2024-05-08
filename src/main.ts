@@ -4,6 +4,9 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 
+import { createPinia } from 'pinia'
+const pinia = createPinia()
+
 import PrimeVue from "primevue/config";
 import "primevue/resources/themes/aura-dark-purple/theme.css";
 import "primeicons/primeicons.css";
@@ -22,6 +25,7 @@ import Skeleton from "primevue/skeleton";
 const app = createApp(App);
 app.use(router);
 app.use(PrimeVue);
+app.use(pinia);
 app.component("Dialog", Dialog);
 app.component("Card", Card);
 app.component("Button", Button);
