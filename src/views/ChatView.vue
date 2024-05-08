@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { ref } from 'vue';
-import type Message from '../types/Message';
+import type Message from '../types/message';
 
 let messages = ref<Message[]>([]);
 

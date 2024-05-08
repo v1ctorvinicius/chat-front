@@ -1,9 +1,8 @@
-import type Message from "./Message";
+import type Message from "./message";
 
-export default interface chat {
-  id: number;
+export default interface Chat {
+  id: string;
   name: string;
   password: string;
   messages: Message[];
 }
-  

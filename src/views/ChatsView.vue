@@ -1,28 +1,36 @@
 <script setup lang="ts">
 import ChatCard from "@/components/ChatCard.vue";
+import ChatModal from "@/components/ChatModal.vue";
 import Message from "@/components/Message.vue";
-import type chat from "@/types/chat";
+import type Chat from "@/types/chat";
+import type User from "@/types/user";
 
 import { computed, onMounted, ref } from "vue";
 
 import axios from "axios";
 import axiosInstance from "@/plugins/axiosConfig";
 
+import { useUserStore } from "@/stores/userStore";
+import { useChatStore } from "@/stores/openChatsStore";
+
 import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
 import { useToast } from 'primevue/usetoast';
 
 import io from "socket.io-client";
-import type message from "@/types/Message";
+import type message from "@/types/message";
 
 const toastSuccess = useToast();
 const toastError = useToast();
 const toastErrorNameTooLarge = useToast();
 
-const chats = ref<chat[]>([]);
-const openChats = ref<chat[]>([]);
-const dratfs = ref<string[]>([]);
-const selectedCard = ref<chat | null | undefined>(null);
+const userStore = useUserStore();
+const chatStore = useChatStore();
+
+const chats = ref<Chat[]>([]);
+// const openChats = ref<Chat[]>([]);
+const drafts = ref([""]);
+const selectedCard = ref<Chat | null | undefined>(null);
 
 const newChatName = ref("");
 const newChatPassword = ref("");
@@ -42,6 +50,9 @@ const baseUrl: string = import.meta.env.VITE_BASE_URL;
 onMounted(() => {
   axiosInstance.get(apiBaseUrl + "/chats/").then((res) => (chats.value = res.data));
 })
+
+
+
 
 
 const createChat = () => {
@@ -82,7 +93,7 @@ function handleKeyboardKeydown(event: KeyboardEvent) {
   if (event.repeat) return;
   if (event.key === "Escape") {
     isCreateChatModalVisible.value = false;
-    openChats.value = [];
+    chatStore.openChats = [];
   }
 }
 
@@ -102,41 +113,49 @@ socket.on("chatCreated", (res) => {
   chats.value = res;
 })
 
+const draftIndex = ref(0);
+const chatCardClickHandler = (chatObject: Chat) => {
 
-const chatCardClickHandler = (chatObject: chat) => {
+  const newSelectedChat = chats.value.find((chat) => chat.id == chatObject?.id);
 
-  const newSelectedCard = chats.value.find((chat) => chat.id == chatObject?.id);
-
-  if (!newSelectedCard) {
+  if (!newSelectedChat) {
     return;
   }
 
-  selectedCard.value = newSelectedCard;
+  selectedCard.value = newSelectedChat;
 
   // remove from openChats if already open
-  if (openChats.value.includes(newSelectedCard)) {
-    openChats.value = openChats.value.filter((chat) => chat.id != newSelectedCard.id);
+  if (chatStore.openChats.includes(newSelectedChat)) {
+    chatStore.removeOpenChat(newSelectedChat);
     return;
   }
 
   // add to openChats if not open yet
-  openChats.value.push(newSelectedCard);
+  chatStore.openChats.push(newSelectedChat);
+
 }
 
-const sendMessage = (message: string, chatId: number) => {
-  console.log("sendMessage", message);
-  let newMessage: message = {
-    id: Math.random(),
-    chatId: chatId,
-    content: message,
-    userId: 1,
-    timestamp: new Date().toLocaleString(),
-    sender: "localhost",
-  }
+// const sendMessage = (chatId: string) => {
 
-  socket.emit("message", newMessage);
-  // axiosInstance.post(apiBaseUrl + "/chats/send-message/" + chatId , { content: message });
-}
+//   const newMessageContent = drafts.value?.map((draft) => {
+//     return draft;
+//   });
+
+//   console.log("newMessageContent: ", newMessageContent);
+
+
+//   let newMessage: message = {
+//     chatId: chatId,
+//     userId: userStore.userId,
+//     content: 'newMessageContent',
+//     username: userStore.username,
+//     timestamp: new Date().toLocaleString("en-US", { timeZone: "UTC" }),
+//   }
+
+//   console.log("sendMessage: ", newMessage);
+
+//   socket.emit("message", newMessage);
+// }
 
 </script>
 
@@ -158,9 +177,9 @@ const sendMessage = (message: string, chatId: number) => {
           </ButtonGroup>
         </div>
         <div class="chat-cards-container">
-          <ChatCard :class="{ 'on-chats-open': openChats.includes(chat) }" v-for="chat in chats"
+          <ChatCard :class="{ 'on-chats-open': chatStore.openChats.includes(chat) }" v-for="chat in chats"
             @chat-card-click="(chatObject) => chatCardClickHandler(chatObject)" :chatObject="chat"
-            @click="selectedCard = chat" :selected="openChats.includes(chat)" />
+            @click="selectedCard = chat" :selected="chatStore.openChats.includes(chat)" />
         </div>
       </main>
     </section>
@@ -188,30 +207,7 @@ const sendMessage = (message: string, chatId: number) => {
 
   </Dialog>
 
-  <!-- modal for opening chat -->
-
-  <!-- "sidebar how to remove mask"  -->
-  <!--  -->
-  <!--  -->
-  <!--  https://forum.primefaces.og/viewtopic.php?t=60072 -->
-  <!--  -->
-  <Dialog v-for="chat in openChats" :visible="openChats.includes(chat)" :modal=false :header="chat.name"
-    :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'"
-    :pt:content:style="'padding-top: 10px; display: flex; flex-direction: column;'"
-    :pt:closeButton:onClick="() => { openChats = openChats.filter((chat) => chat.id != chat.id) }" :pt:mask:style="{}">
-
-    <div class="messages-container">
-      <Message v-for="message in chat.messages" :key="message.id" :message="message.sender + ' > ' + message.content" />
-    </div>
-    <div style="display: flex;">
-      <InputText v-model="dratfs[0]" class="input-text" id="new-chat-name-input-text" type="text"
-        :pt:root:autofocus="true" :invalid="isNewChatNameInvalid"
-        @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
-      <Button @click="sendMessage(dratfs[0], chat.id)" :loading="false" label="Send" severity="success"
-        icon="pi pi-send" />
-    </div>
-    <template #footer></template>
-  </Dialog>
+  <ChatModal v-for="chat in chatStore.openChats" :visible="chatStore.openChats.includes(chat)" :chat="chat" />
 
 
   <Toast position="bottom-left" />
