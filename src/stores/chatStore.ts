@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 
 export const useChatStore = defineStore("chatStore", () => {
+  const chats = ref<Chat[]>([]);
   const openChats = ref<Chat[]>([]);
 
   function removeOpenChat(chat: Chat) {
@@ -12,5 +13,5 @@ export const useChatStore = defineStore("chatStore", () => {
     }
   }
 
-  return { openChats, removeOpenChat };
+  return { openChats, removeOpenChat, chats };
 });

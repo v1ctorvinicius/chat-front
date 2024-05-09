@@ -1,27 +1,35 @@
 <script setup lang="ts">
 import type Chat from '@/types/chat';
-import { useChatStore } from '@/stores/openChatsStore';
+import { useChatStore } from '@/stores/chatStore';
 import { useUserStore } from '@/stores/userStore';
 import { onMounted, ref } from 'vue';
 import type message from '@/types/message';
 import io from "socket.io-client";
 import Message from './Message.vue';
 
-const props = defineProps(['visible', 'chat']);
+const props = defineProps(['visible', 'chat', 'socket']);
 const visible = ref(props.visible);
 
 const chatStore = useChatStore();
 const userStore = useUserStore();
 
-const socket = io(import.meta.env.VITE_BASE_URL);
-
 const draft = ref("");
 const messages = ref<message[]>(props.chat.messages);
 
+const socket = props.socket;
+
+socket.on("chatupdated", (data: any) => {
+  const newMessage = data.messages[data.messages.length - 1];
+
+  if (data.id !== props.chat.id) {
+    chatStore.chats.find((chat) => chat.id == props.chat.id)?.messages.push(newMessage);
+    return;
+  }
+
+  messages.value.push(newMessage);
+});
+
 const sendMessage = (chatId: string) => {
-
-  console.log("abertos: ", chatStore.openChats);
-
 
   let newMessage: message = {
     chatId: chatId,
@@ -32,8 +40,8 @@ const sendMessage = (chatId: string) => {
   }
 
   socket.emit("message", newMessage);
-  messages.value.push(newMessage);
   draft.value = "";
+
 }
 
 const closeModal = () => {
@@ -50,8 +58,9 @@ const closeModal = () => {
   <!--  -->
   <!--  https://forum.primefaces.og/viewtopic.php?t=60072 -->
   <!--  -->
-  <Dialog :position="'bottom'" :visible="visible" :modal=false :header="props.chat.name" :pt:title:style="'color:tomato;'"
-    :pt:header:style="'color: white;'" :pt:content:style="'padding-top: 10px; display: flex; flex-direction: column;'"
+  <Dialog :position="'bottom'" :visible="visible" :modal=false :header="props.chat.name"
+    :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'"
+    :pt:content:style="'padding-top: 10px; display: flex; flex-direction: column;'"
     :pt:closeButton:onClick="closeModal">
 
     <div class="messages-container">

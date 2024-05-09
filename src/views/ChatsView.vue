@@ -11,7 +11,7 @@ import axios from "axios";
 import axiosInstance from "@/plugins/axiosConfig";
 
 import { useUserStore } from "@/stores/userStore";
-import { useChatStore } from "@/stores/openChatsStore";
+import { useChatStore } from "@/stores/chatStore";
 
 import InputText from "primevue/inputtext";
 import FloatLabel from "primevue/floatlabel";
@@ -109,8 +109,8 @@ document.addEventListener("keydown", (event) => {
 const showSearchInput = () => { }
 
 const socket = io(baseUrl);
-socket.on("chatCreated", (res) => {
-  chats.value = res;
+socket.on("chatCreated", (data) => {
+  chats.value = data;
 })
 
 const draftIndex = ref(0);
@@ -207,8 +207,8 @@ const chatCardClickHandler = (chatObject: Chat) => {
 
   </Dialog>
 
-  <ChatModal v-for="chat in chatStore.openChats" :visible="chatStore.openChats.includes(chat)" :chat="chat" />
-
+  <ChatModal v-for="chat in chatStore.openChats" :visible="chatStore.openChats.includes(chat)" :chat="chat"
+    :socket="socket" />
 
   <Toast position="bottom-left" />
 </template>
