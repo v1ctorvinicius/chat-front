@@ -3,7 +3,7 @@ import { ref } from "vue";
 
 export const useUserStore = defineStore("user", () => {
   const userId = ref("");
-  const username = ref("");
+  const username = ref("guest" + Math.floor(Math.random() * 1000));
   const isAuthenticated = ref(false);
 
   function setUser(_userId: string) {
