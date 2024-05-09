@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 15px;">
-    <h3>{{ message?.content }}</h3>
+    <h3>{{message?.username}} :~$ {{ message?.content }}</h3>
   </div>
 </template>
 
