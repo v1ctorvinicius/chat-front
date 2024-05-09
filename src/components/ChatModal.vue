@@ -8,6 +8,8 @@ import io from "socket.io-client";
 import Message from './Message.vue';
 
 const props = defineProps(['visible', 'chat', 'socket']);
+const emit = defineEmits(['closeModal', 'notThisChat']);
+
 const visible = ref(props.visible);
 
 const chatStore = useChatStore();
@@ -22,7 +24,9 @@ socket.on("chatupdated", (data: any) => {
   const newMessage = data.messages[data.messages.length - 1];
 
   if (data.id !== props.chat.id) {
-    chatStore.chats.find((chat) => chat.id == props.chat.id)?.messages.push(newMessage);
+    // console.log("not this chat, it's:", chatStore.chats.find((chat) => chat.id == data.id));
+    // emit("notThisChat", data);
+    // chatStore.updateChats();
     return;
   }
 

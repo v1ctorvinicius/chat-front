@@ -27,7 +27,7 @@ const toastErrorNameTooLarge = useToast();
 const userStore = useUserStore();
 const chatStore = useChatStore();
 
-const chats = ref<Chat[]>([]);
+// const chats = ref<Chat[]>(chatStore.chats);
 // const openChats = ref<Chat[]>([]);
 const drafts = ref([""]);
 const selectedCard = ref<Chat | null | undefined>(null);
@@ -48,7 +48,7 @@ const baseUrl: string = import.meta.env.VITE_BASE_URL;
 //TODO: cachear a lista de chats
 
 onMounted(() => {
-  axiosInstance.get(apiBaseUrl + "/chats/").then((res) => (chats.value = res.data));
+  axiosInstance.get(apiBaseUrl + "/chats/").then((data) => (chatStore.chats = data.data));
 })
 
 
@@ -110,13 +110,13 @@ const showSearchInput = () => { }
 
 const socket = io(baseUrl);
 socket.on("chatCreated", (data) => {
-  chats.value = data;
+  chatStore.chats = data;
 })
 
 const draftIndex = ref(0);
 const chatCardClickHandler = (chatObject: Chat) => {
 
-  const newSelectedChat = chats.value.find((chat) => chat.id == chatObject?.id);
+  const newSelectedChat = chatStore.chats.find((chat) => chat.id == chatObject?.id);
 
   if (!newSelectedChat) {
     return;
@@ -161,8 +161,8 @@ const chatCardClickHandler = (chatObject: Chat) => {
 
 <template>
   <div class="container text-white">
-    <section class="chat-cards-section blue-whale-alpha" :class="{ 'empty': chats.length == 0 }">
-      <div v-if="chats.length == 0">
+    <section class="chat-cards-section blue-whale-alpha" :class="{ 'empty': chatStore.chats.length == 0 }">
+      <div v-if="chatStore.chats.length == 0">
         <h2>There are no chats 😐 </h2>
         <Button @click="changeCreateChatModalVisibility" label="new chat" icon="pi pi-plus" severity="success"
           style="width: 100%; margin-top: 10%;" />
@@ -177,7 +177,7 @@ const chatCardClickHandler = (chatObject: Chat) => {
           </ButtonGroup>
         </div>
         <div class="chat-cards-container">
-          <ChatCard :class="{ 'on-chats-open': chatStore.openChats.includes(chat) }" v-for="chat in chats"
+          <ChatCard :class="{ 'on-chats-open': chatStore.openChats.includes(chat) }" v-for="chat in chatStore.chats"
             @chat-card-click="(chatObject) => chatCardClickHandler(chatObject)" :chatObject="chat"
             :selected="chatStore.openChats.includes(chat)" />
         </div>
