@@ -10,7 +10,6 @@ export const useChatStore = defineStore("chatStore", () => {
   const openChats = ref<Chat[]>([]);
 
   function updateChats() {
-    console.log("updated");
     axiosInstance
       .get(apiBaseUrl + "/chats/")
       .then((data) => (chats.value = data.data));

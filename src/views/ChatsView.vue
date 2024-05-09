@@ -51,10 +51,6 @@ onMounted(() => {
   axiosInstance.get(apiBaseUrl + "/chats/").then((data) => (chatStore.chats = data.data));
 })
 
-
-
-
-
 const createChat = () => {
   createChatLoading.value = true;
 
@@ -108,6 +104,7 @@ document.addEventListener("keydown", (event) => {
 
 const showSearchInput = () => { }
 
+//TODO: change socket logic to use pinia
 const socket = io(baseUrl);
 socket.on("chatCreated", (data) => {
   chatStore.chats = data;

@@ -1,5 +1,3 @@
-import type User from "@/types/user";
-
 export default interface Message {
   chatId: string;
   userId: string;
