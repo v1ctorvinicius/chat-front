@@ -57,8 +57,6 @@ const closeModal = () => {
 
 onMounted(() => {
   axiosInstance.get(apiBaseUrl + "/chats/" + props.chat.id + "/messages").then((res) => {
-    console.log("res.data: ", res.data);
-    
     messages.value = res.data;  
   })  
 })
@@ -73,7 +71,8 @@ onMounted(() => {
   <!--  -->
   <!--  https://forum.primefaces.og/viewtopic.php?t=60072 -->
   <!--  -->
-  <Dialog :position="'bottom'" :visible="visible" :modal=false :header="props.chat.name"
+  
+  <Dialog maximizable autoZIndex  :position="'bottom'" :visible="visible" :modal=false :header="props.chat.name"
     :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'"
     :pt:content:style="'padding-top: 10px; display: flex; flex-direction: column;'"
     :pt:closeButton:onClick="closeModal">

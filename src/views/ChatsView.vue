@@ -183,7 +183,7 @@ const chatCardClickHandler = (chatObject: Chat) => {
   </div>
 
   <!-- modal for creating new chat -->
-  <Dialog :visible="isCreateChatModalVisible" modal header="Create new chat"
+  <Dialog dismissableMask :visible="isCreateChatModalVisible" modal header="Create new chat"
     :pt:mask:style="{ 'backdrop-filter': 'blur(5px)' }" :pt:title:style="'color:tomato;'"
     :pt:header:style="'color: white;'" :pt:closeButton:onClick="modalCreateChatCloseButtonHandler">
     <FloatLabel class="float-label">
