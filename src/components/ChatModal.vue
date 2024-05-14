@@ -4,7 +4,7 @@ import { useChatStore } from '@/stores/chatStore';
 import { useUserStore } from '@/stores/userStore';
 import { onMounted, ref } from 'vue';
 import type message from '@/types/message';
-import io from "socket.io-client";
+
 import Message from './Message.vue';
 import axiosInstance from '@/plugins/axiosConfig';
 
@@ -23,22 +23,19 @@ const messages = ref<message[]>(props.chat.messages);
 
 const socket = props.socket;
 
-socket.on("chatupdated", (data: any) => {
-  const newMessageContent = data.messages[data.messages.length - 1];
+onMounted(() => {
+  axiosInstance.get(apiBaseUrl + "/chats/" + props.chat.id + "/messages").then((res) => {
+    messages.value = res.data;  
+  })  
+})
 
-  if (data.id !== props.chat.id) {
-    // console.log("not this chat, it's:", chatStore.chats.find((chat) => chat.id == data.id));
-    // emit("notThisChat", data);
-    // chatStore.updateChats();
-    return;
-  }
-  // console.log("new message:", newMessageContent);
-  
+socket.on("chatupdated", (data: any) => {
+  if (data.id !== props.chat.id) return;
+  const newMessageContent = data.messages[data.messages.length - 1];
   messages.value.push(newMessageContent);
 });
 
 const sendMessage = (chatId: string) => {
-
   let newMessage: message = {
     chatId: chatId,
     userId: userStore.userId,
@@ -55,11 +52,7 @@ const closeModal = () => {
   chatStore.removeOpenChat(props.chat);
 }
 
-onMounted(() => {
-  axiosInstance.get(apiBaseUrl + "/chats/" + props.chat.id + "/messages").then((res) => {
-    messages.value = res.data;  
-  })  
-})
+
 
 </script>
 

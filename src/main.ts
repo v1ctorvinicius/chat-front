@@ -21,6 +21,7 @@ import Toast from "primevue/toast";
 import ToastService from "primevue/toastservice";
 import InputText from "primevue/inputtext";
 import Skeleton from "primevue/skeleton";
+import Message from 'primevue/message';
 
 const app = createApp(App);
 app.use(router);
@@ -36,5 +37,6 @@ app.component("Menubar", Menubar);
 app.component("Toast", Toast);
 app.component("InputText", InputText);
 app.component("Skeleton", Skeleton);
+app.component("Message", Message);
 app.use(ToastService);
 app.mount("#app");
