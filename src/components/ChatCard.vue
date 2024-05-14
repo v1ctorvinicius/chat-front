@@ -24,7 +24,7 @@ function cardClickHandler() {
     </template>
 
     <template #title>{{ props.chatObject?.name }}</template>
-    <template #subtitle>created by: user_name</template>
+    <template #subtitle>created_by: <span style="color: tomato;">{{ props.chatObject?.createdBy }}</span></template>
     <template #content>
       <p class="m-0">
         lorem ipsum dolor sit amet <br>
@@ -57,6 +57,12 @@ function cardClickHandler() {
   box-shadow: rgba(240, 46, 170, 0.4) 5px 5px, rgba(240, 46, 170, 0.3) 10px 10px,
     rgba(240, 46, 170, 0.2) 15px 15px, rgba(240, 46, 170, 0.1) 20px 20px,
     rgba(240, 46, 170, 0.05) 25px 25px !important;
+}
+
+.selected:hover{
+  box-shadow: rgba(236, 233, 4, 0.5) 5px 5px, rgba(24, 187, 65, 0.4) 10px 10px,
+    rgba(51, 211, 2, 0.3) 15px 15px, rgba(46, 240, 208, 0.2) 20px 20px,
+    rgba(139, 106, 231, 0.2) 25px 25px !important;
 }
 
 @keyframes fadein {

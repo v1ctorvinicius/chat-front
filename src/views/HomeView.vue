@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import { useUserStore } from "@/stores/userStore";
+import useUserStore from "@/stores/userStore";
 
 const userStore = useUserStore();
 
@@ -16,10 +16,11 @@ const userStore = useUserStore();
     </Message>
   </div>
 
-  <div class="container" >
+  <div class="container">
 
-    <div class="user-info blue-whale-alpha">
-      <p>your username: <span style="font-weight: bold; font-size: 1vw; color: tomato">{{ useUserStore().username }}</span></p>
+    <div class="user-info blue-whale-alpha" style="display: flex; flex-direction: column; height: 55vh; justify-content: space-around;">
+      <img :src="useUserStore().imageUrl" style="width: 300px; height: 300px; border-radius: 50%;" />
+      <p>username: <span style="font-weight: bold; font-size: 1vw; color: tomato">{{ useUserStore().username }}</span></p>
     </div>
 
   </div>
@@ -49,7 +50,12 @@ const userStore = useUserStore();
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80vw;
+  /* width: 80vw; */
   padding: 2vw;
+  border-radius: 10px;
+}
+
+.user-info img:hover {
+  border: 1px solid #193842;
 }
 </style>

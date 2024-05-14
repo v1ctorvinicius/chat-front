@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-export const useUserStore = defineStore("user", () => {
+const useUserStore = defineStore("user", () => {
   const userId = ref("");
   const username = ref("guest" + Math.floor(Math.random() * 1000));
   const isAuthenticated = ref(false);
+  const imageUrl = ref(`https://picsum.photos/id/237/250/250`);
 
   function setUser(_userId: string) {
     userId.value = _userId;
@@ -18,5 +19,15 @@ export const useUserStore = defineStore("user", () => {
     isAuthenticated.value = _isAuthenticated;
   }
 
-  return { userId, username, setUser, setUsername, setIsAuthenticated, isAuthenticated };
+  return {
+    userId,
+    username,
+    imageUrl,
+    isAuthenticated,
+    setUser,
+    setUsername,
+    setIsAuthenticated,
+  };
 });
+
+export default useUserStore;

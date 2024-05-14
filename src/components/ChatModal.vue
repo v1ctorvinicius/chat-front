@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type Chat from '@/types/chat';
 import { useChatStore } from '@/stores/chatStore';
-import { useUserStore } from '@/stores/userStore';
+import useUserStore from '@/stores/userStore';
 import { onMounted, ref } from 'vue';
 import type message from '@/types/message';
 
@@ -25,8 +25,8 @@ const socket = props.socket;
 
 onMounted(() => {
   axiosInstance.get(apiBaseUrl + "/chats/" + props.chat.id + "/messages").then((res) => {
-    messages.value = res.data;  
-  })  
+    messages.value = res.data;
+  })
 })
 
 socket.on("chatupdated", (data: any) => {
@@ -41,6 +41,7 @@ const sendMessage = (chatId: string) => {
     userId: userStore.userId,
     content: draft.value,
     username: userStore.username,
+    userImg: userStore.imageUrl,
     timestamp: new Date().toLocaleString("en-US", { timeZone: "UTC" }),
   }
 
@@ -52,8 +53,6 @@ const closeModal = () => {
   chatStore.removeOpenChat(props.chat);
 }
 
-
-
 </script>
 
 <template>
@@ -64,20 +63,25 @@ const closeModal = () => {
   <!--  -->
   <!--  https://forum.primefaces.og/viewtopic.php?t=60072 -->
   <!--  -->
-  
-  <Dialog maximizable autoZIndex  :position="'bottom'" :visible="visible" :modal=false :header="props.chat.name"
-    :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'"
-    :pt:content:style="'padding-top: 10px; display: flex; flex-direction: column;'"
-    :pt:closeButton:onClick="closeModal">
 
-    <div class="messages-container">
-      <Message v-for="message in messages" :message="message" />
-    </div>
-    <div style="display: flex;">
-      <InputText v-model="draft" class="input-text" id="new-chat-name-input-text" type="text" :pt:root:autofocus="true"
-        :invalid="false" @keydown.enter="($event) => { if ($event.repeat) return; sendMessage(chat.id) }" />
-      <Button @click="sendMessage(chat.id)" :loading="false" label="Send" severity="success" icon="pi pi-send" />
-    </div>
-    <template #footer></template>
-  </Dialog>
+  <div class="container">
+    <Dialog maximizable autoZIndex :position="'bottom'" :visible="visible" :modal=false :header="props.chat.name"
+      :pt:root:style="'max-width: 50vw; max-height: 75vh;'"
+      :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'"
+      :pt:content:style="'padding-top: 10px; display: flex; flex-direction: column;'"
+      :pt:closeButton:onClick="closeModal">
+      <div class="messages-container">
+        <Message v-for="message in messages" :message="message" />
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <InputText v-model="draft" class="input-text" id="new-chat-name-input-text" type="text"
+          :pt:root:autofocus="true" :pt:root:style="'width: 100%;'" :invalid="false"
+          @keydown.enter="($event) => { if ($event.repeat) return; sendMessage(chat.id) }" />
+        <Button @click="sendMessage(chat.id)" :loading="false" label="Send" severity="success" icon="pi pi-send" />
+      </div>
+      <template #footer></template>
+    </Dialog>
+  </div>
 </template>
+
+<style scoped></style>

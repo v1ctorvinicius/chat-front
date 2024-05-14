@@ -10,7 +10,7 @@ import { computed, onMounted, ref } from "vue";
 import axios from "axios";
 import axiosInstance from "@/plugins/axiosConfig";
 
-import { useUserStore } from "@/stores/userStore";
+import useUserStore from "@/stores/userStore";
 import { useChatStore } from "@/stores/chatStore";
 
 import InputText from "primevue/inputtext";
@@ -62,9 +62,9 @@ const createChat = () => {
 
   axiosInstance
     .post(apiBaseUrl + "/chats/", { name: newChatName.value, password: newChatPassword.value, creator: "guest" })
+    //TODO: check if res.data is valid
     .then((res) => {
       createChatLoading.value = false;
-      //TODO: check if res.data is valid
       showSuccessToast();
       newChatName.value = "";
       newChatPassword.value = "";
@@ -103,18 +103,9 @@ document.addEventListener("keydown", (event) => {
   handleKeyboardKeydown(event);
 });
 
-window.addEventListener("keydown", (event) => {
-  if (event.key === "n" && isCreateChatModalVisible.value === true) return;
-
-  if (event.key === "n") {
-    isCreateChatModalVisible.value = true;
-
-  }
-})
-
 const showSearchInput = () => { }
 
-//TODO: change socket logic to use pinia
+//TODO: change socket logic to use pinia, or try
 const socket = io(baseUrl);
 socket.on("chatCreated", (data) => {
   chatStore.chats = data;
@@ -214,8 +205,7 @@ const chatCardClickHandler = (chatObject: Chat) => {
 
   </Dialog>
 
-  <ChatModal v-for="chat in chatStore.openChats" :visible="chatStore.openChats.includes(chat)" :chat="chat"
-    :socket="socket" />
+  <ChatModal v-for="chat in chatStore.openChats" :visible="chatStore.openChats.includes(chat)" :chat="chat" :socket="socket" />
 
   <Toast position="bottom-left" />
 </template>
