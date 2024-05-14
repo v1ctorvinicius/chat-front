@@ -95,12 +95,22 @@ function handleKeyboardKeydown(event: KeyboardEvent) {
 
 function modalCreateChatCloseButtonHandler() {
   changeCreateChatModalVisibility();
+  newChatName.value = "";
   selectedCard.value = null;
 }
 
 document.addEventListener("keydown", (event) => {
   handleKeyboardKeydown(event);
 });
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "n" && isCreateChatModalVisible.value === true) return;
+
+  if (event.key === "n") {
+    isCreateChatModalVisible.value = true;
+
+  }
+})
 
 const showSearchInput = () => { }
 
