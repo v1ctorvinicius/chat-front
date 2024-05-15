@@ -43,7 +43,8 @@ const items = ref([
   <div class="nav ">
 
     <header>
-      <Menubar :model="items" class="blue-whale-alpha " :breakpoint="'480px'" :pt="{
+      <Menubar :model="items" class="blue-whale-alpha " :breakpoint="'480px'" 
+      :pt="{
         button: (options) => ({
           style: {
             'border-radius': '5px',

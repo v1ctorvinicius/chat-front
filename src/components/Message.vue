@@ -36,10 +36,7 @@ const userImg = ref<string | undefined>("");// = message.value?.userImg;
   text-align: justify;
   word-break: break-all;
   margin-bottom: 1%;
-  
-  
   padding: 1%;
-  
 }
 
 img {

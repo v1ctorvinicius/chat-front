@@ -7,6 +7,7 @@ import type message from '@/types/message';
 
 import Message from './Message.vue';
 import axiosInstance from '@/plugins/axiosConfig';
+import { watch } from 'vue';
 
 const apiBaseUrl: string = import.meta.env.VITE_API_BASE_URL;
 
@@ -53,6 +54,11 @@ const closeModal = () => {
   chatStore.removeOpenChat(props.chat);
 }
 
+const notMaximized = ref(true);
+watch(notMaximized, () => {
+  console.log("notMaximized", notMaximized.value)
+})
+
 </script>
 
 <template>
@@ -65,18 +71,22 @@ const closeModal = () => {
   <!--  -->
 
   <div style="position: absolute; top: 0;">
-    <Dialog maximizable autoZIndex :position="'bottom'" :visible="visible" :modal=false :header="props.chat.name"
+
+    <Dialog @maximize="notMaximized = false" @unmaximize="notMaximized = true" style="min-width: 25vw;" maximizable
+      autoZIndex :position="'bottom'" :visible="visible" :modal=false :header="props.chat.name" :pt:root:style="' '"
       :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'"
-      :pt:content:style="' background-color: #0F0F12; max-width: 33vw; display: flex; flex-direction: column-reverse'"
+      :pt:content:style="' background-color: #0F0F12; display: flex; flex-direction: column-reverse'"
       :pt:footer:style="' flex-direction: column; padding: 10px;'" :pt:closeButton:onClick="closeModal">
 
-      <div class="messages-container">
+      <div style="border: 1px solid green; min-height: 10vh;" :class="notMaximized ? 'not-maximized' : ''">
         <Message v-for="message in messages" :message="message" />
       </div>
 
       <template #footer>
         <div style=" display: flex; justify-content: center;">
-          <InputText style="flex-grow: 2; margin: 0; padding: 3%;" v-model="draft" type="text" :pt:root:autofocus="true" :invalid="false"
+          <InputText style="flex-grow: 2; margin: 0; padding: 3%; width: 10px;" v-model="draft" type="text"
+            :pt:root:autofocus="true" :invalid="false"
+            :pt:root:style="' height: 10vh; padding: 1vw; border: 1px solid tomato;'"
             @keydown.enter="($event) => { if ($event.repeat) return; sendMessage(chat.id) }" />
           <Button @click="sendMessage(chat.id)" :loading="false" label="Send" severity="success" icon="pi pi-send" />
         </div>
@@ -86,4 +96,7 @@ const closeModal = () => {
 </template>
 
 <style scoped>
+.not-maximized {
+  max-width: 45vw;
+}
 </style>
