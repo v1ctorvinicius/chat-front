@@ -1,7 +1,7 @@
 <template>
-  <div style="padding: 15px;">
-    <img :src="userImg" style="width: 50px; height: 50px; border-radius: 50%;" />
-    <h3>{{message?.username}} :~$ {{ message?.content }}</h3>
+  <div class="container">
+    <img :src="userImg" />
+    <h3>{{ message?.username }}:~$ {{ message?.content }}</h3>
   </div>
 </template>
 
@@ -27,3 +27,24 @@ const userImg = ref<string | undefined>("");// = message.value?.userImg;
 
 
 </script>
+
+<style scoped>
+.container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: justify;
+  word-break: break-all;
+  margin-bottom: 1%;
+  
+  
+  padding: 1%;
+  
+}
+
+img {
+  width: 60px;
+  border-radius: 50%;
+  margin-right: 2%;
+}
+</style>

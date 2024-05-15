@@ -64,24 +64,26 @@ const closeModal = () => {
   <!--  https://forum.primefaces.og/viewtopic.php?t=60072 -->
   <!--  -->
 
-  <div class="container">
+  <div style="position: absolute; top: 0;">
     <Dialog maximizable autoZIndex :position="'bottom'" :visible="visible" :modal=false :header="props.chat.name"
-      :pt:root:style="'max-width: 50vw; max-height: 75vh;'"
       :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'"
-      :pt:content:style="'padding-top: 10px; display: flex; flex-direction: column;'"
-      :pt:closeButton:onClick="closeModal">
+      :pt:content:style="' background-color: #0F0F12; max-width: 33vw; display: flex; flex-direction: column-reverse'"
+      :pt:footer:style="' flex-direction: column; padding: 10px;'" :pt:closeButton:onClick="closeModal">
+
       <div class="messages-container">
         <Message v-for="message in messages" :message="message" />
       </div>
-      <div style="display: flex; justify-content: space-between;">
-        <InputText v-model="draft" class="input-text" id="new-chat-name-input-text" type="text"
-          :pt:root:autofocus="true" :pt:root:style="'width: 100%;'" :invalid="false"
-          @keydown.enter="($event) => { if ($event.repeat) return; sendMessage(chat.id) }" />
-        <Button @click="sendMessage(chat.id)" :loading="false" label="Send" severity="success" icon="pi pi-send" />
-      </div>
-      <template #footer></template>
+
+      <template #footer>
+        <div style=" display: flex; justify-content: center;">
+          <InputText style="flex-grow: 2; margin: 0; padding: 3%;" v-model="draft" type="text" :pt:root:autofocus="true" :invalid="false"
+            @keydown.enter="($event) => { if ($event.repeat) return; sendMessage(chat.id) }" />
+          <Button @click="sendMessage(chat.id)" :loading="false" label="Send" severity="success" icon="pi pi-send" />
+        </div>
+      </template>
     </Dialog>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>
