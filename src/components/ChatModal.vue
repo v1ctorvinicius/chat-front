@@ -55,9 +55,6 @@ const closeModal = () => {
 }
 
 const notMaximized = ref(true);
-watch(notMaximized, () => {
-  console.log("notMaximized", notMaximized.value)
-})
 
 </script>
 
@@ -73,12 +70,12 @@ watch(notMaximized, () => {
   <div style="position: absolute; top: 0;">
 
     <Dialog @maximize="notMaximized = false" @unmaximize="notMaximized = true" style="min-width: 25vw;" maximizable
-      autoZIndex :position="'bottom'" :visible="visible" :modal=false :header="props.chat.name" :pt:root:style="' '"
+      autoZIndex :position="'bottom'" :visible="visible" :modal=false :header="props.chat.name"
       :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'"
-      :pt:content:style="' background-color: #0F0F12; display: flex; flex-direction: column-reverse'"
-      :pt:footer:style="' flex-direction: column; padding: 10px;'" :pt:closeButton:onClick="closeModal">
+      :pt:content:style="' background-color: #0F0F12; display: flex; flex-direction: column-reverse;'"
+      :pt:footer:style="'display:flex; flex-direction: column; padding: 10px;'" :pt:closeButton:onClick="closeModal">
 
-      <div style="border: 1px solid green; min-height: 10vh;" :class="notMaximized ? 'not-maximized' : ''">
+      <div class="messages-container" :class="notMaximized ? 'not-maximized' : ''">
         <Message v-for="message in messages" :message="message" />
       </div>
 
@@ -96,6 +93,10 @@ watch(notMaximized, () => {
 </template>
 
 <style scoped>
+.messages-container{
+  border: 1px solid green;
+  flex-direction: column-reverse;
+}
 .not-maximized {
   max-width: 45vw;
 }
