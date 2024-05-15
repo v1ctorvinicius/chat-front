@@ -43,7 +43,7 @@ const items = ref([
   <div class="nav ">
 
     <header>
-      <Menubar :pt="{
+      <Menubar :model="items" class="blue-whale-alpha " :breakpoint="'480px'" :pt="{
         button: (options) => ({
           style: {
             'border-radius': '5px',
@@ -59,7 +59,7 @@ const items = ref([
         }), label: (options) => ({
           style: { 'margin-right': '15px' }
         })
-      }" :model="items" class="blue-whale-alpha margin-5 border-radius-10" :breakpoint="'480px'" />
+      }" />
     </header>
   </div>
 </template>
@@ -68,7 +68,6 @@ const items = ref([
 .nav {
   z-index: 9999;
   position: fixed;
-  margin-top: 5vh;
 }
 
 @media (min-width: 768px) and (max-width: 979px) {
