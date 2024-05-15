@@ -72,7 +72,7 @@ const notMaximized = ref(true);
     <Dialog @maximize="notMaximized = false" @unmaximize="notMaximized = true" style="min-width: 25vw;" maximizable
       autoZIndex :position="'bottom'" :visible="visible" :modal=false :header="props.chat.name"
       :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'"
-      :pt:content:style="' background-color: #0F0F12; display: flex; flex-direction: column-reverse;'"
+      :pt:content:style="' background-color: #0F0F12; display: flex; flex-direction: column-reverse; min-height: 10vh;'"
       :pt:footer:style="'display:flex; flex-direction: column; padding: 10px;'" :pt:closeButton:onClick="closeModal">
 
       <div class="messages-container" :class="notMaximized ? 'not-maximized' : ''">
@@ -93,10 +93,6 @@ const notMaximized = ref(true);
 </template>
 
 <style scoped>
-.messages-container{
-  border: 1px solid green;
-  flex-direction: column-reverse;
-}
 .not-maximized {
   max-width: 45vw;
 }

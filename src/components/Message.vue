@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <img :src="userImg" />
-    <h3>{{ message?.username }}:~$ {{ message?.content }}</h3>
+    <h3><span style="color: tomato">{{ message?.username }}</span>:~$ {{ message?.content }}</h3>
   </div>
 </template>
 
