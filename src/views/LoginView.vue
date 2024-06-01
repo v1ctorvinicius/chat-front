@@ -20,7 +20,7 @@ function googleOauthSignIn() {
   // Parameters to pass to OAuth 2.0 endpoint.
   var params = {
     'client_id': '1004669497691-6ls2jdbj99fu7ap7p1d56r1cqjsl68j5.apps.googleusercontent.com',
-    'redirect_uri': 'http://localhost:5173/login-success/',
+    'redirect_uri': `${import.meta.env.VITE_REDIRECT_URI}`,//'http://localhost:5173/login-success/',
     'response_type': 'token',
     'scope': 'profile',
     'include_granted_scopes': 'true',
