@@ -1,9 +1,28 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+// import {authService} from "@/services/auth";
 
 import useUserStore from "@/stores/userStore";
 
 const userStore = useUserStore();
+const router = useRouter();
+
+const login = () => {
+  router.push("/login");
+};
+
+// import { AuthenticateUserUseCase } from '@/auth/domain/useCases';
+
+
+// async function coiso() {
+//   try {
+//     const authToken = await AuthenticateUserUseCase.execute(token);
+//   } catch (error) {
+//     console.error('Failed to authenticate:', error.message);
+//   }
+// }
+
 
 </script>
 
@@ -11,16 +30,18 @@ const userStore = useUserStore();
 
   <div class="message-container">
     <Message class="message" v-if="!userStore.isAuthenticated" severity="info"
-      :pt:text:style="'padding: 0 1vw ; display: flex; align-items: center'">Not signed in. Now authenticated as guest
-      <Button @click="userStore.setIsAuthenticated(true)" label="login" style="margin-left: 10px" />
+      :pt:text:style="'padding: 0 1vw ; display: flex; align-items: center'"> Now authenticated as guest
+      <Button @click="login()" label="login" style="margin-left: 10px" />
     </Message>
   </div>
 
   <div class="container">
 
-    <div class="user-info blue-whale-alpha" style="display: flex; flex-direction: column; height: 55vh; justify-content: space-around;">
+    <div class="user-info blue-whale-alpha"
+      style="display: flex; flex-direction: column; height: 55vh; justify-content: space-around;">
       <img :src="useUserStore().imageUrl" style="width: 300px; height: 300px; border-radius: 50%;" />
-      <p>username: <span style="font-weight: bold; font-size: 1vw; color: tomato">{{ useUserStore().username }}</span></p>
+      <p>username: <span style="font-weight: bold; font-size: 1vw; color: tomato">{{ useUserStore().username }}</span>
+      </p>
     </div>
 
   </div>

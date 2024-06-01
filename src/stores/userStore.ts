@@ -15,6 +15,10 @@ const useUserStore = defineStore("user", () => {
     username.value = _username;
   }
 
+  function setImageUrl(_imageUrl: string) {
+    imageUrl.value = _imageUrl;
+  }
+
   function setIsAuthenticated(_isAuthenticated: boolean) {
     isAuthenticated.value = _isAuthenticated;
   }
@@ -26,6 +30,7 @@ const useUserStore = defineStore("user", () => {
     isAuthenticated,
     setUser,
     setUsername,
+    setImageUrl,
     setIsAuthenticated,
   };
 });

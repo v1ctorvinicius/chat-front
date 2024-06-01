@@ -1,15 +1,29 @@
 <script setup lang="ts">
+import useUserStore from "@/stores/userStore";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 const forumStore = ref(0);
 
 const showCreateForumModal = () => {
   showCreateForumModal
 }
 
+const router = useRouter();
 
+const userStore = useUserStore();
+
+const login = () => {
+  router.push("/login");
+};
 </script>
 
 <template>
+  <div class="message-container">
+    <Message class="message" v-if="!userStore.isAuthenticated" severity="info"
+      :pt:text:style="'padding: 0 1vw ; display: flex; align-items: center'"> Now authenticated as guest
+      <Button @click="login" label="login" style="margin-left: 10px" />
+    </Message>
+  </div>
   <div class="container text-white">
     <section class="chat-cards-section blue-whale-alpha" :class="{ 'empty': forumStore == 0 }">
       <div v-if="forumStore == 0">
@@ -71,6 +85,12 @@ const showCreateForumModal = () => {
   margin: 10vh 5vw;
   min-height: 88vh;
   
+}
+
+.message-container {
+  position: absolute;
+  right: 0;
+  margin: 1vh;
 }
 
 .chat-cards-section {

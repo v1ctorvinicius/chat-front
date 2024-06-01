@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import ChatCard from "@/components/ChatCard.vue";
 import ChatModal from "@/components/ChatModal.vue";
-import Message from "@/components/Message.vue";
 import type Chat from "@/types/chat";
-import type User from "@/types/user";
 
 import { computed, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
 import axios from "axios";
 import axiosInstance from "@/plugins/axiosConfig";
@@ -18,7 +17,6 @@ import FloatLabel from "primevue/floatlabel";
 import { useToast } from 'primevue/usetoast';
 
 import io from "socket.io-client";
-import type message from "@/types/message";
 
 const toastSuccess = useToast();
 const toastError = useToast();
@@ -27,14 +25,11 @@ const toastErrorNameTooLarge = useToast();
 const userStore = useUserStore();
 const chatStore = useChatStore();
 
-// const chats = ref<Chat[]>(chatStore.chats);
-// const openChats = ref<Chat[]>([]);
 const drafts = ref([""]);
 const selectedCard = ref<Chat | null | undefined>(null);
 
 const newChatName = ref("");
 const newChatPassword = ref("");
-// const modalTitle = ref("New chat");
 const createChatLoading = ref(false);
 const isCreateChatModalVisible = ref(false);
 
@@ -46,7 +41,6 @@ const apiBaseUrl: string = import.meta.env.VITE_API_BASE_URL;
 const baseUrl: string = import.meta.env.VITE_BASE_URL;
 
 //TODO: cachear a lista de chats
-
 onMounted(() => {
   axiosInstance.get(apiBaseUrl + "/chats/").then((data) => (chatStore.chats = data.data));
 })
@@ -111,7 +105,6 @@ socket.on("chatCreated", (data) => {
   chatStore.chats = data;
 })
 
-const draftIndex = ref(0);
 const chatCardClickHandler = (chatObject: Chat) => {
 
   const newSelectedChat = chatStore.chats.find((chat) => chat.id == chatObject?.id);
@@ -119,8 +112,6 @@ const chatCardClickHandler = (chatObject: Chat) => {
   if (!newSelectedChat) {
     return;
   }
-
-  // selectedCard.value = newSelectedChat;
 
   // remove from openChats if already open
   if (chatStore.openChats.includes(newSelectedChat)) {
@@ -133,31 +124,20 @@ const chatCardClickHandler = (chatObject: Chat) => {
 
 }
 
-// const sendMessage = (chatId: string) => {
+const router = useRouter();
 
-//   const newMessageContent = drafts.value?.map((draft) => {
-//     return draft;
-//   });
-
-//   console.log("newMessageContent: ", newMessageContent);
-
-
-//   let newMessage: message = {
-//     chatId: chatId,
-//     userId: userStore.userId,
-//     content: 'newMessageContent',
-//     username: userStore.username,
-//     timestamp: new Date().toLocaleString("en-US", { timeZone: "UTC" }),
-//   }
-
-//   console.log("sendMessage: ", newMessage);
-
-//   socket.emit("message", newMessage);
-// }
-
+const login = () => {
+  router.push("/login");
+};
 </script>
 
 <template>
+  <div class="message-container">
+    <Message class="message" v-if="!userStore.isAuthenticated" severity="info"
+      :pt:text:style="'padding: 0 1vw ; display: flex; align-items: center'"> Now authenticated as guest
+      <Button @click="login" label="login" style="margin-left: 10px" />
+    </Message>
+  </div>
   <div class="container text-white">
     <section class="chat-cards-section blue-whale-alpha" :class="{ 'empty': chatStore.chats.length == 0 }">
       <div v-if="chatStore.chats.length == 0">
@@ -205,7 +185,8 @@ const chatCardClickHandler = (chatObject: Chat) => {
 
   </Dialog>
 
-  <ChatModal v-for="chat in chatStore.openChats" :visible="chatStore.openChats.includes(chat)" :chat="chat" :socket="socket" />
+  <ChatModal v-for="chat in chatStore.openChats" :visible="chatStore.openChats.includes(chat)" :chat="chat"
+    :socket="socket" />
 
   <Toast position="bottom-left" />
 </template>
@@ -221,12 +202,17 @@ a {
     rgba(139, 106, 231, 0.1) 25px 25px !important;
 }
 
-.messages-container {
+/* .messages-container {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
+} */
 
+.message-container {
+  position: absolute;
+  right: 0;
+  margin: 1vh;
 }
 
 @media (min-width: 1200px) {

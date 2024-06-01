@@ -4,8 +4,8 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 
-import { createPinia } from 'pinia'
-const pinia = createPinia()
+import { createPinia } from "pinia";
+const pinia = createPinia();
 
 import PrimeVue from "primevue/config";
 import "primevue/resources/themes/aura-dark-purple/theme.css";
@@ -21,7 +21,9 @@ import Toast from "primevue/toast";
 import ToastService from "primevue/toastservice";
 import InputText from "primevue/inputtext";
 import Skeleton from "primevue/skeleton";
-import Message from 'primevue/message';
+import Message from "primevue/message";
+import useUserStore from "./stores/userStore";
+import { isTokenExpired } from "./auth/auth";
 
 const app = createApp(App);
 app.use(router);
@@ -40,3 +42,18 @@ app.component("Skeleton", Skeleton);
 app.component("Message", Message);
 app.use(ToastService);
 app.mount("#app");
+
+const userStore = useUserStore();
+
+const token = localStorage.getItem("token");
+if (!token) {
+  userStore.setIsAuthenticated(false);
+} else if (isTokenExpired()) {
+  console.log("Token expired");
+  userStore.setIsAuthenticated(false);
+  
+} else {
+  userStore.setIsAuthenticated(true);
+  userStore.setUsername(localStorage.getItem("username") ?? "");
+  userStore.setImageUrl(localStorage.getItem("imageUrl") ?? "");
+}
