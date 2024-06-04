@@ -71,7 +71,6 @@ function googleOauthSignIn() {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* margin: 10vh 5vw; */
   min-height: 100vh;
   border-radius: 10px;
   margin-bottom: 5vh;
@@ -79,6 +78,7 @@ function googleOauthSignIn() {
 
 .container{
   padding: 2%;
+  width: 30%;
   border-radius: 10px;
 }
 </style>
