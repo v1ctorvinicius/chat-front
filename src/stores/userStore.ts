@@ -21,6 +21,12 @@ const useUserStore = defineStore("user", () => {
 
   function setIsAuthenticated(_isAuthenticated: boolean) {
     isAuthenticated.value = _isAuthenticated;
+    if (_isAuthenticated === false) {
+      userId.value = "";
+      username.value = "guest" + Math.floor(Math.random() * 1000);
+      imageUrl.value = `https://picsum.photos/id/237/250/250`;
+      localStorage.clear();
+    }
   }
 
   return {
