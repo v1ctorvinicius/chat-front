@@ -19,7 +19,7 @@ function googleOauthSignIn() {
 
   // Parameters to pass to OAuth 2.0 endpoint.
   var params = {
-    'client_id': '1004669497691-6ls2jdbj99fu7ap7p1d56r1cqjsl68j5.apps.googleusercontent.com',
+    'client_id': `${import.meta.env.VITE_GOOGLE_CLIENT_ID}`,
     'redirect_uri': `${import.meta.env.VITE_REDIRECT_URI}`,
     'response_type': 'token',
     'scope': 'profile',
@@ -76,7 +76,7 @@ function googleOauthSignIn() {
   margin-bottom: 5vh;
 }
 
-.container{
+.container {
   padding: 2%;
   width: 30%;
   border-radius: 10px;
