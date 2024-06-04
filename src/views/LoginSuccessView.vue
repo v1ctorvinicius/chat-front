@@ -23,7 +23,7 @@ onMounted(() => {
     localStorage.setItem("token", token);
     localStorage.setItem("expirationTime", expirationTime.toString());
     localStorage.setItem("username", res.data.name);
-    localStorage.setItem("imageUrl", res.data.picture.split('=s96')[0]);
+    localStorage.setItem("imageUrl", res.data.picture.split('=s96')[0] + "=s500");
     localStorage.setItem("isAuthenticated", "true");
 
     userStore.setImageUrl(res.data.picture);
