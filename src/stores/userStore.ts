@@ -6,9 +6,14 @@ const useUserStore = defineStore("user", () => {
   const username = ref("guest" + Math.floor(Math.random() * 1000));
   const isAuthenticated = ref(false);
   const imageUrl = ref(`https://picsum.photos/id/237/250/250`);
+  const token = ref(localStorage.getItem("token") ?? "");
 
   function setUser(_userId: string) {
     userId.value = _userId;
+  }
+
+  function getToken() {
+    return token.value;
   }
 
   function setUsername(_username: string) {
@@ -35,6 +40,7 @@ const useUserStore = defineStore("user", () => {
     imageUrl,
     isAuthenticated,
     setUser,
+    getToken,
     setUsername,
     setImageUrl,
     setIsAuthenticated,
