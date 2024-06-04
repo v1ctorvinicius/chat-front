@@ -8,7 +8,7 @@ const loginEmail = () => {
 /*
  * Create form to request access token from Google's OAuth 2.0 server.
  */
-function googleOauthSignIn() {w
+function googleOauthSignIn() {
   // Google's OAuth 2.0 endpoint for requesting an access token
   var oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
 
