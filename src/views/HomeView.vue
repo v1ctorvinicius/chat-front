@@ -40,8 +40,9 @@ const login = () => {
     <div class="user-info blue-whale-alpha"
       style="display: flex; flex-direction: column; height: 55vh; justify-content: space-around;">
       <img :src="useUserStore().imageUrl" style="width: 300px; height: 300px; border-radius: 50%;" />
-      <p>username: <span style="font-weight: bold; font-size: 1vw; color: tomato">{{ useUserStore().username }}</span>
-      </p>
+      <p>username: <span style="font-weight: bold; font-size: 1vw; color: tomato">{{ useUserStore().username }}</span></p>
+      <!-- logout button  -->
+      <Button :disabled="!userStore.isAuthenticated" severity="danger" @click="userStore.setIsAuthenticated(false)" label="Logout" style=" align-self: flex-end; min-width: 40%;" icon="pi pi-sign-out" :pt:icon:style="'padding: 10% 10%'" />
     </div>
 
   </div>
@@ -72,7 +73,7 @@ const login = () => {
   justify-content: center;
   align-items: center;
   /* width: 80vw; */
-  padding: 2vw;
+  padding: 0 2vw;
   border-radius: 10px;
 }
 
