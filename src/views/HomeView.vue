@@ -4,6 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 // import {authService} from "@/services/auth";
 
 import useUserStore from "@/stores/userStore";
+import axiosInstance from "@/plugins/axiosConfig";
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -11,6 +12,10 @@ const router = useRouter();
 const login = () => {
   router.push("/login");
 };
+
+const logout = () => {
+  userStore.setIsAuthenticated(false);
+}
 
 // import { AuthenticateUserUseCase } from '@/auth/domain/useCases';
 
@@ -40,8 +45,9 @@ const login = () => {
     <div class="user-info blue-whale-alpha"
       style="display: flex; flex-direction: column; height: 55vh; justify-content: space-around;">
       <img :src="useUserStore().imageUrl" style="width: 300px; height: 300px; border-radius: 50%;" />
-      <p>username: <span style="font-weight: bold; font-size: 1vw; color: tomato">{{ useUserStore().username }}</span>
-      </p>
+      <p>username: <span style="font-weight: bold; font-size: 1vw; color: tomato">{{ useUserStore().username }}</span></p>
+      <!-- logout button  -->
+      <Button :disabled="!userStore.isAuthenticated" severity="danger" @click="logout()" label="Logout" style=" align-self: flex-end; min-width: 40%;" icon="pi pi-sign-out" :pt:icon:style="'padding: 10% 10%'" />
     </div>
 
   </div>
@@ -72,7 +78,7 @@ const login = () => {
   justify-content: center;
   align-items: center;
   /* width: 80vw; */
-  padding: 2vw;
+  padding: 0 2vw;
   border-radius: 10px;
 }
 

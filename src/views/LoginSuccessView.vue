@@ -4,11 +4,9 @@ import { useRoute } from "vue-router";
 import axiosInstance from "@/plugins/axiosConfig";
 
 import useUserStore from "@/stores/userStore";
-import { useChatStore } from "@/stores/chatStore";
 import { useRouter } from "vue-router";
 
 const userStore = useUserStore();
-const chatStore = useChatStore();
 
 const router = useRouter();
 
@@ -25,7 +23,7 @@ onMounted(() => {
     localStorage.setItem("token", token);
     localStorage.setItem("expirationTime", expirationTime.toString());
     localStorage.setItem("username", res.data.name);
-    localStorage.setItem("imageUrl", res.data.picture);
+    localStorage.setItem("imageUrl", res.data.picture.split('=s96')[0]);
     localStorage.setItem("isAuthenticated", "true");
 
     userStore.setImageUrl(res.data.picture);
@@ -33,14 +31,12 @@ onMounted(() => {
     userStore.setIsAuthenticated(true);
 
     // timeout to redirect to home
-    setTimeout(() => {
-      router.push({ name: "home" });
-    }, 2000);
+    // setTimeout(() => {
+    router.push({ name: "home" });
+    // }, 2000);
 
   })
 })
-
-
 
 </script>
 

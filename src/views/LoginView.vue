@@ -19,8 +19,8 @@ function googleOauthSignIn() {
 
   // Parameters to pass to OAuth 2.0 endpoint.
   var params = {
-    'client_id': '1004669497691-6ls2jdbj99fu7ap7p1d56r1cqjsl68j5.apps.googleusercontent.com',
-    'redirect_uri': `${import.meta.env.VITE_REDIRECT_URI}`,//'http://localhost:5173/login-success/',
+    'client_id': `${import.meta.env.VITE_GOOGLE_CLIENT_ID}`,
+    'redirect_uri': `${import.meta.env.VITE_REDIRECT_URI}`,
     'response_type': 'token',
     'scope': 'profile',
     'include_granted_scopes': 'true',
@@ -45,9 +45,8 @@ function googleOauthSignIn() {
 </script>
 
 <template>
-  <div class="container text-white blue-whale-alpha">
-    <section style="text-align: center;">
-      <h1 style="font-size: 2.5em;">Login 🪪🚪</h1>
+  <div class="panel">
+    <section class="container blue-whale-alpha text-white" style="text-align: center;">
       <div class="providers" style="margin-bottom: 100px">
 
         <Button @click="googleOauthSignIn" label="Enter with Google" icon="pi pi-google"
@@ -67,13 +66,19 @@ function googleOauthSignIn() {
 </template>
 
 <style>
-.container {
+.panel {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  margin: 10vh 5vw;
-  min-height: 88vh;
+  min-height: 100vh;
+  border-radius: 10px;
+  margin-bottom: 5vh;
+}
+
+.container {
+  padding: 2%;
+  width: 30%;
   border-radius: 10px;
 }
 </style>
