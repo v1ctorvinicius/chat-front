@@ -19,15 +19,16 @@ onMounted(() => {
   let newUrl = `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}`;
 
   axiosInstance.get(newUrl).then((res) => {
-
+    let username = res.data.name;
+    let imageUrl = res.data.picture.split('=s96')[0];
     localStorage.setItem("token", token);
     localStorage.setItem("expirationTime", expirationTime.toString());
-    localStorage.setItem("username", res.data.name);
-    localStorage.setItem("imageUrl", res.data.picture.split('=s96')[0] + "=s500");
+    localStorage.setItem("username", username);
+    localStorage.setItem("imageUrl", imageUrl);
     localStorage.setItem("isAuthenticated", "true");
 
-    userStore.setImageUrl(res.data.picture);
-    userStore.setUsername(res.data.name);
+    userStore.setImageUrl(imageUrl);
+    userStore.setUsername(username);
     userStore.setIsAuthenticated(true);
 
     // timeout to redirect to home
