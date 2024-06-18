@@ -51,7 +51,7 @@ const sendMessage = (chatId: string) => {
 }
 
 const closeModal = () => {
-  chatStore.removeOpenChat(props.chat);
+  chatStore.closeChat(props.chat);
 }
 
 const notMaximized = ref(true);

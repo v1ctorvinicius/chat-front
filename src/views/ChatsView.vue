@@ -6,7 +6,6 @@ import type Chat from "@/types/chat";
 import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
-import axios from "axios";
 import axiosInstance from "@/plugins/axiosConfig";
 
 import useUserStore from "@/stores/userStore";
@@ -25,8 +24,7 @@ const toastErrorNameTooLarge = useToast();
 const userStore = useUserStore();
 const chatStore = useChatStore();
 
-const drafts = ref([""]);
-const selectedCard = ref<Chat | null | undefined>(null);
+const router = useRouter();
 
 const newChatName = ref("");
 const newChatPassword = ref("");
@@ -42,7 +40,7 @@ const baseUrl: string = import.meta.env.VITE_BASE_URL;
 
 //TODO: cachear a lista de chats
 onMounted(() => {
-  axiosInstance.get(apiBaseUrl + "/chats/").then((data) => (chatStore.chats = data.data));
+  chatStore.updateChats();
 })
 
 const createChat = () => {
@@ -62,7 +60,7 @@ const createChat = () => {
       showSuccessToast();
       newChatName.value = "";
       newChatPassword.value = "";
-      isCreateChatModalVisible.value = false;
+      changeCreateChatModalVisibility(false);
     })
     .catch((err) => { console.error(err); createChatLoading.value = false; showErrorToast(err); });
 };
@@ -75,22 +73,29 @@ const showErrorToast = (message: string) => {
   toastError.add({ severity: 'error', summary: 'Error', life: 0, detail: message });
 };
 
-function changeCreateChatModalVisibility() {
-  isCreateChatModalVisible.value = !isCreateChatModalVisible.value;
+function changeCreateChatModalVisibility(value?: boolean) {
+  if (value) {
+    isCreateChatModalVisible.value = !isCreateChatModalVisible.value;
+    return;
+  }
+  isCreateChatModalVisible.value = value!;
+
 }
 
 function handleKeyboardKeydown(event: KeyboardEvent) {
   if (event.repeat) return;
   if (event.key === "Escape") {
-    isCreateChatModalVisible.value = false;
+    if (isCreateChatModalVisible.value === true) {
+      changeCreateChatModalVisibility(false);
+      return;
+    }
     chatStore.openChats = [];
   }
 }
 
 function modalCreateChatCloseButtonHandler() {
-  changeCreateChatModalVisibility();
+  changeCreateChatModalVisibility(false);
   newChatName.value = "";
-  selectedCard.value = null;
 }
 
 document.addEventListener("keydown", (event) => {
@@ -102,33 +107,26 @@ const showSearchInput = () => { }
 //TODO: change socket logic to use pinia, or try
 const socket = io(baseUrl);
 socket.on("chatCreated", (data) => {
-  chatStore.chats = data;
+  chatStore.chats.push(data);
 })
 
 const chatCardClickHandler = (chatObject: Chat) => {
-
+  //TODO: isso é um mock
   const newSelectedChat = chatStore.chats.find((chat) => chat.id == chatObject?.id);
-
-  if (!newSelectedChat) {
-    return;
-  }
-
-  // remove from openChats if already open
+  if (!newSelectedChat) return
   if (chatStore.openChats.includes(newSelectedChat)) {
-    chatStore.removeOpenChat(newSelectedChat);
+    chatStore.closeChat(newSelectedChat);
     return;
   }
-
-  // add to openChats if not open yet
   chatStore.openChats.push(newSelectedChat);
-
 }
 
-const router = useRouter();
 
 const login = () => {
   router.push("/login");
 };
+
+
 </script>
 
 <template>
@@ -142,22 +140,21 @@ const login = () => {
     <section class="chat-cards-section blue-whale-alpha" :class="{ 'empty': chatStore.chats.length == 0 }">
       <div v-if="chatStore.chats.length == 0">
         <h2>There are no chats 😐 </h2>
-        <Button @click="changeCreateChatModalVisibility" label="new chat" icon="pi pi-plus" severity="success"
+        <Button @click="changeCreateChatModalVisibility(true)" label="new chat" icon="pi pi-plus" severity="success"
           style="width: 100%; margin-top: 10%;" />
       </div>
 
       <main v-else>
         <div class="menu card flex justify-content-center" style="margin-bottom: 2vh;">
           <ButtonGroup>
-            <Button icon="pi pi-plus" @click="changeCreateChatModalVisibility" />
+            <Button icon="pi pi-plus" @click="changeCreateChatModalVisibility(true)" />
             <Button icon="pi pi-search" />
             <Button icon="pi pi-cog" />
           </ButtonGroup>
         </div>
         <div class="chat-cards-container">
-          <ChatCard :class="{ 'on-chats-open': chatStore.openChats.includes(chat) }" v-for="chat in chatStore.chats"
-            @chat-card-click="(chatObject) => chatCardClickHandler(chatObject)" :chatObject="chat"
-            :selected="chatStore.openChats.includes(chat)" />
+          <ChatCard :class="{ 'open-chats': chatStore.openChats.includes(chat) }" v-for="chat in chatStore.chats"
+            @chat-card-click="(chatObject) => chatCardClickHandler(chatObject)" :chatObject="chat" />
         </div>
       </main>
     </section>
@@ -185,8 +182,8 @@ const login = () => {
 
   </Dialog>
 
-  <ChatModal v-for="chat in chatStore.openChats" :visible="chatStore.openChats.includes(chat)" :chat="chat"
-    :socket="socket" />
+  <ChatModal :key="chat.id" v-for="chat in chatStore.openChats" :visible="chatStore.openChats.includes(chat)"
+    :chat="chat" :socket="socket" @click="console.log('oi')" />
 
   <Toast position="bottom-left" />
 </template>
@@ -196,10 +193,18 @@ a {
   color: white;
 }
 
-.on-chats-open {
+.open-chats {
+  transform: translate3d(-5px, -5px, 0) !important;
   box-shadow: rgba(236, 233, 4, 0.4) 5px 5px, rgba(24, 187, 65, 0.3) 10px 10px,
     rgba(51, 211, 2, 0.2) 15px 15px, rgba(46, 240, 208, 0.1) 20px 20px,
     rgba(139, 106, 231, 0.1) 25px 25px !important;
+
+}
+
+.open-chats:hover {
+  box-shadow: rgba(236, 233, 4, 0.5) 5px 5px, rgba(24, 187, 65, 0.4) 10px 10px,
+    rgba(51, 211, 2, 0.3) 15px 15px, rgba(46, 240, 208, 0.2) 20px 20px,
+    rgba(139, 106, 231, 0.2) 25px 25px !important;
 }
 
 /* .messages-container {
@@ -303,8 +308,6 @@ a {
     gap: 3vw;
     padding: 0 2vw 5vh 2vw;
   }
-
-  .chat-card {}
 
   .menu {
     margin: 1vh 2vw;
