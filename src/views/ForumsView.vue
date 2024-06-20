@@ -3,18 +3,22 @@ import { useForumStore } from "@/stores/forumStore";
 import useUserStore from "@/stores/userStore";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import ForumCard from "@/components/ForumCard.vue";
 
 
 const forumStore = useForumStore();
 const router = useRouter();
 const userStore = useUserStore();
 const isCreateForumModalVisible = ref(false);
-
+const newForumName = ref("");
+const newForumDescription = ref("");
+const isNewForumNameInvalid = ref(false);
+const isNewForumPasswordInvalid = ref(false);
+const isNewForumDescriptionInvalid = ref(false);
+const createforumLoading = ref(false);
 
 onMounted(() => {
   forumStore.updateForums();
-  console.log("forums: ", forumStore.forums);
-    
 });
 
 function changeCreateForumModalVisibility(value?: boolean) {
@@ -27,6 +31,34 @@ function changeCreateForumModalVisibility(value?: boolean) {
 
 const login = () => {
   router.push("/login");
+};
+
+const modalCreateForumCloseButtonHandler = () => {
+  changeCreateForumModalVisibility(false);
+  newForumName.value = "";
+  newForumDescription.value = "";
+}
+
+const createForum = () => {
+  createForumLoading.value = true;
+
+  if (newForumName.value.length > 50) {
+    toastErrorNameTooLarge.add({ severity: 'error', summary: 'Error', life: 0, detail: 'Forum name cannot be longer than 50 characters, got:  ' + newForumName.value.length });
+    createForumLoading.value = false;
+    return;
+  }
+
+  axiosInstance
+    .post(apiBaseUrl + "/chats/", { name: newForumName.value, password: newForumPassword.value, creator: "guest" })
+    //TODO: check if res.data is valid
+    .then((res) => {
+      createForumLoading.value = false;
+      showSuccessToast();
+      newForumName.value = "";
+      newForumPassword.value = "";
+      changeCreateForumModalVisibility(false);
+    })
+    .catch((err) => { console.error(err); createForumLoading.value = false; showErrorToast(err); });
 };
 
 </script>
@@ -55,39 +87,35 @@ const login = () => {
           </ButtonGroup>
         </div>
         <div class="chat-cards-container">
-          <ForumCard v-for="forum in forumStore.forums" :key="forum.id" @forum-card-click="" :forumObject="forum"></ForumCard>
-
-          <!-- <ForumCard :class="{ 'on-chats-open': chatStore.openChats.includes(chat) }" v-for="chat in forumStore.forums"
-              @chat-card-click="(chatObject) => chatCardClickHandler(chatObject)" :chatObject="chat"
-              :selected="chatStore.openChats.includes(chat)" /> -->
+          <ForumCard v-for="forum in forumStore.forums" :key="forum.id" @forum-card-click="" :forumObject="forum" />
         </div>
       </main>
     </section>
   </div>
 
-  <!-- modal for creating new chat -->
-  <!-- <Dialog dismissableMask :visible="isCreateChatModalVisible" modal header="Create new chat"
+  <!-- modal for creating new forum -->
+  <Dialog :visible="isCreateForumModalVisible" modal header="Create new forum"
     :pt:mask:style="{ 'backdrop-filter': 'blur(5px)' }" :pt:title:style="'color:tomato;'"
-    :pt:header:style="'color: white;'" :pt:closeButton:onClick="modalCreateChatCloseButtonHandler">
+    :pt:header:style="'color: white;'" :pt:closeButton:onClick="modalCreateForumCloseButtonHandler">
     <FloatLabel class="float-label">
-      <label for="new-chat-name-input-text">Enter new chat name</label>
-      <InputText class="input-text" id="new-chat-name-input-text" type="text" :pt:root:autofocus="true"
-        :invalid="isNewChatNameInvalid" v-model="newChatName"
-        @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
+      <label for="new-forum-name-input-text">Enter new forum name</label>
+      <InputText class="input-text" id="new-forum-name-input-text" type="text" :pt:root:autofocus="true"
+        :invalid="isNewForumNameInvalid" v-model="newForumName"
+        @keydown.enter="($event) => { if ($event.repeat) return; createForum() }" />
     </FloatLabel>
 
     <FloatLabel class="float-label">
-      <label for="new-chat-password-input-text">Enter password</label>
-      <InputText class="input-text" id="new-chat-password-input-text" type="text" :invalid="isNewChatPasswordInvalid"
-        v-model="newChatPassword" @keydown.enter="($event) => { if ($event.repeat) return; createChat() }" />
+      <label for="new-forum-password-input-text">Enter password</label>
+      <InputText class="input-text" id="new-forum-password-input-text" type="text" :invalid="isNewForumPasswordInvalid"
+        v-model="newForumPassword" @keydown.enter="($event) => { if ($event.repeat) return; createForum() }" />
     </FloatLabel>
     <template #footer>
-      <Button @click="createChat" :loading="createChatLoading" label="Create" severity="success" icon="pi pi-check" />
+      <Button @click="createForum" :loading="createForumLoading" label="Create" severity="success" icon="pi pi-check" />
     </template>
 
-</Dialog> -->
+  </Dialog>
 
-  <!-- <ChatModal v-for="chat in chatStore.openChats" :visible="chatStore.openChats.includes(chat)" :chat="chat"
+  <!-- <ForumModal v-for="forum in forumStore.openForums" :visible="forumStore.openForums.includes(forum)" :forum="forum"
     :socket="socket" /> -->
 
   <Toast position="bottom-left" />

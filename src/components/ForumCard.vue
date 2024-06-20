@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, watch } from "vue";
 import { useForumStore } from "@/stores/forumStore";
+import type { Forum } from "@/types/forum";
 
 
 const props = defineProps({
-  forumObject: Object as () => Chat,
+  forumObject: Object as () => Forum,
 });
 
 const emit = defineEmits(["forumCardClick"]);
