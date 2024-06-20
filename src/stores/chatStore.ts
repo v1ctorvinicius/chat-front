@@ -2,7 +2,6 @@ import type Chat from "@/types/chat";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import axiosInstance from "@/plugins/axiosConfig";
-import { arraysEqual } from "@/util/arrays";
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -14,17 +13,19 @@ export const useChatStore = defineStore("chatStore", () => {
     axiosInstance
       .get(apiBaseUrl + "/chats/")
       .then((response) => {
-        const newData = response.data; // Novos dados da API
+        const newData = response.data as Chat[]; // Asserting the response type
+        const currentChats = chats.value;
 
-        // Converter 'chats.value' de 'Proxy' para um array simples
-        const currentChats = Array.from(chats.value);
+        const newChats = newData.filter((chat) => {
+          return !currentChats.some(
+            (currentChat) => currentChat.id === chat.id
+          );
+        });
 
-        // Verificar se os novos dados são diferentes dos dados atuais
-        if (!arraysEqual(currentChats, newData)) {
-          chats.value = newData; // Atualizar o estado apenas se os dados forem diferentes
-          // console.log("Dados atualizados:", chats.value);
-        } else {
-          console.log("Dados não mudaram.");
+        console.log("newChats: ", newChats);
+
+        if (newChats.length > 0) {
+          chats.value.push(...newChats);
         }
       })
       .catch((error) => {

@@ -1,20 +1,34 @@
 <script setup lang="ts">
+import { useForumStore } from "@/stores/forumStore";
 import useUserStore from "@/stores/userStore";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-const forumStore = ref(0);
 
-const showCreateForumModal = () => {
-  showCreateForumModal
-}
 
+const forumStore = useForumStore();
 const router = useRouter();
-
 const userStore = useUserStore();
+const isCreateForumModalVisible = ref(false);
+
+
+onMounted(() => {
+  forumStore.updateForums();
+  console.log("forums: ", forumStore.forums);
+    
+});
+
+function changeCreateForumModalVisibility(value?: boolean) {
+  if (value) {
+    isCreateForumModalVisible.value = !isCreateForumModalVisible.value;
+    return;
+  }
+  isCreateForumModalVisible.value = value!;
+}
 
 const login = () => {
   router.push("/login");
 };
+
 </script>
 
 <template>
@@ -25,27 +39,29 @@ const login = () => {
     </Message>
   </div>
   <div class="container text-white">
-    <section class="chat-cards-section blue-whale-alpha" :class="{ 'empty': forumStore == 0 }">
-      <div v-if="forumStore == 0">
+    <section class="chat-cards-section blue-whale-alpha" :class="{ 'empty': forumStore.forums.length == 0 }">
+      <div v-if="forumStore.forums.length == 0">
         <h2>There are no forums 😐 </h2>
-        <Button @click="showCreateForumModal" label="new chat" icon="pi pi-plus" severity="success"
+        <Button @click="changeCreateForumModalVisibility(true)" label="new chat" icon="pi pi-plus" severity="success"
           style="width: 100%; margin-top: 10%;" />
       </div>
 
-      <!-- <main v-else>
+      <main v-else>
         <div class="menu card flex justify-content-center" style="margin-bottom: 2vh;">
           <ButtonGroup>
-            <Button icon="pi pi-plus" @click="changeCreateChatModalVisibility" />
+            <Button icon="pi pi-plus" @click="changeCreateForumModalVisibility(true)" />
             <Button icon="pi pi-search" />
             <Button icon="pi pi-cog" />
           </ButtonGroup>
         </div>
         <div class="chat-cards-container">
-          <ChatCard :class="{ 'on-chats-open': chatStore.openChats.includes(chat) }" v-for="chat in chatStore.chats"
-            @chat-card-click="(chatObject) => chatCardClickHandler(chatObject)" :chatObject="chat"
-            :selected="chatStore.openChats.includes(chat)" />
+          <ForumCard v-for="forum in forumStore.forums" :key="forum.id" @forum-card-click="" :forumObject="forum"></ForumCard>
+
+          <!-- <ForumCard :class="{ 'on-chats-open': chatStore.openChats.includes(chat) }" v-for="chat in forumStore.forums"
+              @chat-card-click="(chatObject) => chatCardClickHandler(chatObject)" :chatObject="chat"
+              :selected="chatStore.openChats.includes(chat)" /> -->
         </div>
-      </main> -->
+      </main>
     </section>
   </div>
 
@@ -84,7 +100,7 @@ const login = () => {
   justify-content: space-between;
   margin: 10vh 5vw;
   min-height: 88vh;
-  
+
 }
 
 .message-container {
@@ -94,7 +110,7 @@ const login = () => {
 }
 
 .chat-cards-section {
-  
+
   border-radius: 10px;
   padding: 2%;
   margin: 0 2%;
