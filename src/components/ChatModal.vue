@@ -69,10 +69,11 @@ const notMaximized = ref(true);
 
   <div style="position: absolute; top: 0;">
 
-    <Dialog @maximize="notMaximized = false" @unmaximize="notMaximized = true" style="min-width: 25vw;" maximizable
-      autoZIndex :position="'bottom'" :visible="visible" :modal=false :header="props.chat.name"
-      :pt:title:style="'color:tomato;'" :pt:header:style="'color: white;'"
-      :pt:content:style="' background-color: #0F0F12; display: flex; flex-direction: column-reverse; min-height: 10vh;'"
+    <Dialog @maximize="notMaximized = false" @unmaximize="notMaximized = true" maximizable autoZIndex
+      :position="'bottom'" :visible="visible" :modal=false :header="props.chat.name"
+      :pt:root:style="'min-width: 45vw;  background-color: #0F0F12;'" :pt:title:style="'color:tomato;'"
+      :pt:header:style="'color: white;'"
+      :pt:content:style="' background-color: #0F0F12; display: flex; flex-direction: column-reverse; min-height: 10vh; min-height: 50vh;'"
       :pt:footer:style="'display:flex; flex-direction: column; padding: 10px;'" :pt:closeButton:onClick="closeModal">
 
       <div class="messages-container" :class="notMaximized ? 'not-maximized' : ''">

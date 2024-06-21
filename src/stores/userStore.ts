@@ -4,6 +4,7 @@ import { ref } from "vue";
 const useUserStore = defineStore("user", () => {
   const userId = ref("");
   const username = ref("guest" + Math.floor(Math.random() * 1000));
+  const email = ref("");
   const isAuthenticated = ref(false);
   const imageUrl = ref(`https://picsum.photos/id/237/250/250`);
   const token = ref(localStorage.getItem("token") ?? "");
@@ -22,6 +23,10 @@ const useUserStore = defineStore("user", () => {
 
   function setImageUrl(_imageUrl: string) {
     imageUrl.value = _imageUrl;
+  }
+
+  function setUserEmail(_email: string){
+    email.value = _email
   }
 
   function setIsAuthenticated(_isAuthenticated: boolean) {
@@ -44,6 +49,7 @@ const useUserStore = defineStore("user", () => {
     setUsername,
     setImageUrl,
     setIsAuthenticated,
+    setUserEmail
   };
 });
 

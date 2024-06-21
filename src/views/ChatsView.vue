@@ -228,7 +228,6 @@ a {
     justify-content: space-between;
     margin: 10vh 5vw;
     min-height: 88vh;
-
   }
 
   .chat-cards-section {

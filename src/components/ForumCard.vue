@@ -34,11 +34,11 @@ function forumClickHandler() {
       <!-- <img alt="user header"  src="https://picsum.photos/500/200" style="max-height: 100%; width: 100%; overflow: hidden;" /> -->
     </template>
 
-    <template #title>{{ props.forum?.name }}</template>
+    <template #title>{{ props.forumObject?.name }}</template>
     <!-- <template #subtitle>Description: <span style="color: tomato;">{{ props.forumObject?.description }}</span></template> -->
     <template #content>
       <p class="m-0">
-        {{ props.forum?.description }} <br>
+        {{ props.forumObject?.description }} <br>
       </p>
     </template>
     <template #footer>
@@ -52,6 +52,7 @@ function forumClickHandler() {
 .card-container {
   background-color: rgba(2, 7, 8, 0.7);
   margin: 0;
+  max-height: 10vh;
 }
 
 .card-container:hover {

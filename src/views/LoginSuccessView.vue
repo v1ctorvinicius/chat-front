@@ -21,6 +21,8 @@ onMounted(() => {
   axiosInstance.get(newUrl).then((res) => {
     let username = res.data.name;
     let imageUrl = res.data.picture.split('=s96')[0];
+    let userEmail = res.data.email;
+    
     localStorage.setItem("token", token);
     localStorage.setItem("expirationTime", expirationTime.toString());
     localStorage.setItem("username", username);
@@ -29,6 +31,7 @@ onMounted(() => {
 
     userStore.setImageUrl(imageUrl);
     userStore.setUsername(username);
+    userStore.setUserEmail(userEmail);
     userStore.setIsAuthenticated(true);
 
     // timeout to redirect to home
